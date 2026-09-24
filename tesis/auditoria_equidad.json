@@ -1,0 +1,857 @@
+{
+  "umbral": 0.1562,
+  "sensibilidad_objetivo": 0.8,
+  "auroc_global": 0.9503,
+  "n_test": 631663,
+  "por_entidad": [
+    {
+      "grupo": "CHIHUAHUA",
+      "n": 11072,
+      "tasa": 0.0713,
+      "AUROC": 0.9207,
+      "TPR": 0.6882,
+      "FPR": 0.0809,
+      "seleccion": 0.1242,
+      "cal_pred": 0.0659,
+      "cal_obs": 0.0713
+    },
+    {
+      "grupo": "CHIAPAS",
+      "n": 3831,
+      "tasa": 0.0611,
+      "AUROC": 0.9265,
+      "TPR": 0.6624,
+      "FPR": 0.0648,
+      "seleccion": 0.1013,
+      "cal_pred": 0.0567,
+      "cal_obs": 0.0611
+    },
+    {
+      "grupo": "BAJA CALIFORNIA SUR",
+      "n": 11712,
+      "tasa": 0.0307,
+      "AUROC": 0.9272,
+      "TPR": 0.6833,
+      "FPR": 0.0396,
+      "seleccion": 0.0594,
+      "cal_pred": 0.0347,
+      "cal_obs": 0.0307
+    },
+    {
+      "grupo": "AGUASCALIENTES",
+      "n": 5498,
+      "tasa": 0.0615,
+      "AUROC": 0.9304,
+      "TPR": 0.6568,
+      "FPR": 0.0601,
+      "seleccion": 0.0968,
+      "cal_pred": 0.0532,
+      "cal_obs": 0.0615
+    },
+    {
+      "grupo": "DURANGO",
+      "n": 6297,
+      "tasa": 0.0569,
+      "AUROC": 0.931,
+      "TPR": 0.6313,
+      "FPR": 0.052,
+      "seleccion": 0.085,
+      "cal_pred": 0.0465,
+      "cal_obs": 0.0569
+    },
+    {
+      "grupo": "VERACRUZ",
+      "n": 20275,
+      "tasa": 0.1012,
+      "AUROC": 0.934,
+      "TPR": 0.7665,
+      "FPR": 0.0855,
+      "seleccion": 0.1544,
+      "cal_pred": 0.0826,
+      "cal_obs": 0.1012
+    },
+    {
+      "grupo": "NUEVO LEON",
+      "n": 32110,
+      "tasa": 0.0528,
+      "AUROC": 0.9341,
+      "TPR": 0.6865,
+      "FPR": 0.0463,
+      "seleccion": 0.0801,
+      "cal_pred": 0.0449,
+      "cal_obs": 0.0528
+    },
+    {
+      "grupo": "COAHUILA",
+      "n": 12615,
+      "tasa": 0.0576,
+      "AUROC": 0.9342,
+      "TPR": 0.686,
+      "FPR": 0.0537,
+      "seleccion": 0.0901,
+      "cal_pred": 0.0502,
+      "cal_obs": 0.0576
+    },
+    {
+      "grupo": "JALISCO",
+      "n": 27918,
+      "tasa": 0.0887,
+      "AUROC": 0.9348,
+      "TPR": 0.7026,
+      "FPR": 0.0666,
+      "seleccion": 0.123,
+      "cal_pred": 0.0656,
+      "cal_obs": 0.0887
+    },
+    {
+      "grupo": "MICHOACAN",
+      "n": 9484,
+      "tasa": 0.1281,
+      "AUROC": 0.9359,
+      "TPR": 0.8527,
+      "FPR": 0.1159,
+      "seleccion": 0.2102,
+      "cal_pred": 0.1114,
+      "cal_obs": 0.1281
+    },
+    {
+      "grupo": "MEXICO",
+      "n": 65705,
+      "tasa": 0.072,
+      "AUROC": 0.9387,
+      "TPR": 0.7597,
+      "FPR": 0.0696,
+      "seleccion": 0.1193,
+      "cal_pred": 0.0634,
+      "cal_obs": 0.072
+    },
+    {
+      "grupo": "TLAXCALA",
+      "n": 4288,
+      "tasa": 0.0702,
+      "AUROC": 0.9391,
+      "TPR": 0.8405,
+      "FPR": 0.1003,
+      "seleccion": 0.1523,
+      "cal_pred": 0.078,
+      "cal_obs": 0.0702
+    },
+    {
+      "grupo": "SINALOA",
+      "n": 12274,
+      "tasa": 0.0849,
+      "AUROC": 0.9394,
+      "TPR": 0.7994,
+      "FPR": 0.0756,
+      "seleccion": 0.137,
+      "cal_pred": 0.0735,
+      "cal_obs": 0.0849
+    },
+    {
+      "grupo": "NAYARIT",
+      "n": 6700,
+      "tasa": 0.071,
+      "AUROC": 0.9402,
+      "TPR": 0.6996,
+      "FPR": 0.0493,
+      "seleccion": 0.0955,
+      "cal_pred": 0.0537,
+      "cal_obs": 0.071
+    },
+    {
+      "grupo": "HIDALGO",
+      "n": 9345,
+      "tasa": 0.1022,
+      "AUROC": 0.941,
+      "TPR": 0.8806,
+      "FPR": 0.1226,
+      "seleccion": 0.2001,
+      "cal_pred": 0.1011,
+      "cal_obs": 0.1022
+    },
+    {
+      "grupo": "ZACATECAS",
+      "n": 5534,
+      "tasa": 0.0614,
+      "AUROC": 0.9431,
+      "TPR": 0.7735,
+      "FPR": 0.0674,
+      "seleccion": 0.1108,
+      "cal_pred": 0.0591,
+      "cal_obs": 0.0614
+    },
+    {
+      "grupo": "YUCATAN",
+      "n": 12490,
+      "tasa": 0.0705,
+      "AUROC": 0.944,
+      "TPR": 0.7261,
+      "FPR": 0.0475,
+      "seleccion": 0.0954,
+      "cal_pred": 0.0515,
+      "cal_obs": 0.0705
+    },
+    {
+      "grupo": "PUEBLA",
+      "n": 18800,
+      "tasa": 0.113,
+      "AUROC": 0.948,
+      "TPR": 0.92,
+      "FPR": 0.1184,
+      "seleccion": 0.209,
+      "cal_pred": 0.1083,
+      "cal_obs": 0.113
+    },
+    {
+      "grupo": "OAXACA",
+      "n": 13461,
+      "tasa": 0.0558,
+      "AUROC": 0.9512,
+      "TPR": 0.7923,
+      "FPR": 0.0599,
+      "seleccion": 0.1007,
+      "cal_pred": 0.056,
+      "cal_obs": 0.0558
+    },
+    {
+      "grupo": "QUERETARO",
+      "n": 16305,
+      "tasa": 0.0449,
+      "AUROC": 0.953,
+      "TPR": 0.8156,
+      "FPR": 0.0546,
+      "seleccion": 0.0887,
+      "cal_pred": 0.0497,
+      "cal_obs": 0.0449
+    },
+    {
+      "grupo": "TAMAULIPAS",
+      "n": 15876,
+      "tasa": 0.0544,
+      "AUROC": 0.9539,
+      "TPR": 0.8088,
+      "FPR": 0.0484,
+      "seleccion": 0.0897,
+      "cal_pred": 0.0509,
+      "cal_obs": 0.0544
+    },
+    {
+      "grupo": "CAMPECHE",
+      "n": 4191,
+      "tasa": 0.0625,
+      "AUROC": 0.9544,
+      "TPR": 0.9198,
+      "FPR": 0.1107,
+      "seleccion": 0.1613,
+      "cal_pred": 0.0837,
+      "cal_obs": 0.0625
+    },
+    {
+      "grupo": "GUANAJUATO",
+      "n": 29653,
+      "tasa": 0.0575,
+      "AUROC": 0.9579,
+      "TPR": 0.8328,
+      "FPR": 0.0608,
+      "seleccion": 0.1051,
+      "cal_pred": 0.0586,
+      "cal_obs": 0.0575
+    },
+    {
+      "grupo": "BAJA CALIFORNIA",
+      "n": 13953,
+      "tasa": 0.0754,
+      "AUROC": 0.9584,
+      "TPR": 0.8869,
+      "FPR": 0.0801,
+      "seleccion": 0.1409,
+      "cal_pred": 0.0782,
+      "cal_obs": 0.0754
+    },
+    {
+      "grupo": "COLIMA",
+      "n": 6390,
+      "tasa": 0.0444,
+      "AUROC": 0.9598,
+      "TPR": 0.8239,
+      "FPR": 0.0519,
+      "seleccion": 0.0862,
+      "cal_pred": 0.0496,
+      "cal_obs": 0.0444
+    },
+    {
+      "grupo": "MORELOS",
+      "n": 9756,
+      "tasa": 0.0763,
+      "AUROC": 0.96,
+      "TPR": 0.914,
+      "FPR": 0.0951,
+      "seleccion": 0.1575,
+      "cal_pred": 0.0875,
+      "cal_obs": 0.0763
+    },
+    {
+      "grupo": "CIUDAD DE MEXICO",
+      "n": 162746,
+      "tasa": 0.0262,
+      "AUROC": 0.9607,
+      "TPR": 0.808,
+      "FPR": 0.04,
+      "seleccion": 0.0602,
+      "cal_pred": 0.0367,
+      "cal_obs": 0.0262
+    },
+    {
+      "grupo": "QUINTANA ROO",
+      "n": 12151,
+      "tasa": 0.0414,
+      "AUROC": 0.9623,
+      "TPR": 0.8131,
+      "FPR": 0.0407,
+      "seleccion": 0.0727,
+      "cal_pred": 0.0393,
+      "cal_obs": 0.0414
+    },
+    {
+      "grupo": "SONORA",
+      "n": 16698,
+      "tasa": 0.0562,
+      "AUROC": 0.9628,
+      "TPR": 0.8678,
+      "FPR": 0.0635,
+      "seleccion": 0.1086,
+      "cal_pred": 0.0621,
+      "cal_obs": 0.0562
+    },
+    {
+      "grupo": "SAN LUIS POTOSI",
+      "n": 17326,
+      "tasa": 0.0459,
+      "AUROC": 0.9647,
+      "TPR": 0.8681,
+      "FPR": 0.0566,
+      "seleccion": 0.0938,
+      "cal_pred": 0.0528,
+      "cal_obs": 0.0459
+    },
+    {
+      "grupo": "GUERRERO",
+      "n": 12589,
+      "tasa": 0.0666,
+      "AUROC": 0.9679,
+      "TPR": 0.9248,
+      "FPR": 0.0797,
+      "seleccion": 0.136,
+      "cal_pred": 0.0751,
+      "cal_obs": 0.0666
+    },
+    {
+      "grupo": "TABASCO",
+      "n": 24620,
+      "tasa": 0.0222,
+      "AUROC": 0.977,
+      "TPR": 0.8793,
+      "FPR": 0.0359,
+      "seleccion": 0.0547,
+      "cal_pred": 0.0348,
+      "cal_obs": 0.0222
+    }
+  ],
+  "por_sexo": [
+    {
+      "grupo": "Hombre",
+      "n": 309437,
+      "tasa": 0.0681,
+      "AUROC": 0.9456,
+      "TPR": 0.8111,
+      "FPR": 0.0731,
+      "seleccion": 0.1233,
+      "cal_pred": 0.0676,
+      "cal_obs": 0.0681
+    },
+    {
+      "grupo": "Mujer",
+      "n": 322226,
+      "tasa": 0.0444,
+      "AUROC": 0.9538,
+      "TPR": 0.7718,
+      "FPR": 0.0463,
+      "seleccion": 0.0785,
+      "cal_pred": 0.0444,
+      "cal_obs": 0.0444
+    }
+  ],
+  "por_grupo_edad": [
+    {
+      "grupo": "0-17",
+      "n": 47676,
+      "tasa": 0.0029,
+      "AUROC": 0.9347,
+      "TPR": 0.2662,
+      "FPR": 0.0032,
+      "seleccion": 0.0039,
+      "cal_pred": 0.0027,
+      "cal_obs": 0.0029
+    },
+    {
+      "grupo": "18-39",
+      "n": 303100,
+      "tasa": 0.0089,
+      "AUROC": 0.9346,
+      "TPR": 0.6077,
+      "FPR": 0.0149,
+      "seleccion": 0.0202,
+      "cal_pred": 0.0089,
+      "cal_obs": 0.0089
+    },
+    {
+      "grupo": "40-59",
+      "n": 196593,
+      "tasa": 0.0558,
+      "AUROC": 0.9039,
+      "TPR": 0.7426,
+      "FPR": 0.0621,
+      "seleccion": 0.1,
+      "cal_pred": 0.0554,
+      "cal_obs": 0.0558
+    },
+    {
+      "grupo": "60+",
+      "n": 84285,
+      "tasa": 0.256,
+      "AUROC": 0.8444,
+      "TPR": 0.8486,
+      "FPR": 0.3058,
+      "seleccion": 0.4448,
+      "cal_pred": 0.2552,
+      "cal_obs": 0.256
+    }
+  ],
+  "mayores_60_por_entidad": [
+    {
+      "grupo": "CHIAPAS",
+      "n": 482,
+      "tasa": 0.3216,
+      "AUROC": 0.6881,
+      "TPR": 0.7484,
+      "FPR": 0.4709,
+      "seleccion": 0.5602,
+      "cal_pred": 0.3062,
+      "cal_obs": 0.3216
+    },
+    {
+      "grupo": "CHIHUAHUA",
+      "n": 1798,
+      "tasa": 0.2736,
+      "AUROC": 0.7374,
+      "TPR": 0.7317,
+      "FPR": 0.3836,
+      "seleccion": 0.4789,
+      "cal_pred": 0.2561,
+      "cal_obs": 0.2736
+    },
+    {
+      "grupo": "JALISCO",
+      "n": 4212,
+      "tasa": 0.3822,
+      "AUROC": 0.7576,
+      "TPR": 0.7714,
+      "FPR": 0.3978,
+      "seleccion": 0.5406,
+      "cal_pred": 0.2859,
+      "cal_obs": 0.3822
+    },
+    {
+      "grupo": "AGUASCALIENTES",
+      "n": 730,
+      "tasa": 0.311,
+      "AUROC": 0.7626,
+      "TPR": 0.7709,
+      "FPR": 0.3678,
+      "seleccion": 0.4932,
+      "cal_pred": 0.2652,
+      "cal_obs": 0.311
+    },
+    {
+      "grupo": "VERACRUZ",
+      "n": 3243,
+      "tasa": 0.3848,
+      "AUROC": 0.7636,
+      "TPR": 0.7925,
+      "FPR": 0.3784,
+      "seleccion": 0.5378,
+      "cal_pred": 0.3101,
+      "cal_obs": 0.3848
+    },
+    {
+      "grupo": "MICHOACAN",
+      "n": 1840,
+      "tasa": 0.4359,
+      "AUROC": 0.7717,
+      "TPR": 0.884,
+      "FPR": 0.4644,
+      "seleccion": 0.6473,
+      "cal_pred": 0.3738,
+      "cal_obs": 0.4359
+    },
+    {
+      "grupo": "COAHUILA",
+      "n": 1790,
+      "tasa": 0.2676,
+      "AUROC": 0.7838,
+      "TPR": 0.7599,
+      "FPR": 0.3303,
+      "seleccion": 0.4453,
+      "cal_pred": 0.2397,
+      "cal_obs": 0.2676
+    },
+    {
+      "grupo": "NAYARIT",
+      "n": 871,
+      "tasa": 0.3674,
+      "AUROC": 0.7906,
+      "TPR": 0.8188,
+      "FPR": 0.3993,
+      "seleccion": 0.5534,
+      "cal_pred": 0.2968,
+      "cal_obs": 0.3674
+    },
+    {
+      "grupo": "DURANGO",
+      "n": 808,
+      "tasa": 0.2574,
+      "AUROC": 0.7917,
+      "TPR": 0.7212,
+      "FPR": 0.3267,
+      "seleccion": 0.4282,
+      "cal_pred": 0.228,
+      "cal_obs": 0.2574
+    },
+    {
+      "grupo": "TLAXCALA",
+      "n": 628,
+      "tasa": 0.2882,
+      "AUROC": 0.7944,
+      "TPR": 0.8785,
+      "FPR": 0.4318,
+      "seleccion": 0.5605,
+      "cal_pred": 0.3095,
+      "cal_obs": 0.2882
+    },
+    {
+      "grupo": "HIDALGO",
+      "n": 1381,
+      "tasa": 0.3729,
+      "AUROC": 0.7973,
+      "TPR": 0.9146,
+      "FPR": 0.4792,
+      "seleccion": 0.6416,
+      "cal_pred": 0.3726,
+      "cal_obs": 0.3729
+    },
+    {
+      "grupo": "SINALOA",
+      "n": 1735,
+      "tasa": 0.3579,
+      "AUROC": 0.7993,
+      "TPR": 0.8663,
+      "FPR": 0.3995,
+      "seleccion": 0.5666,
+      "cal_pred": 0.3214,
+      "cal_obs": 0.3579
+    },
+    {
+      "grupo": "MEXICO",
+      "n": 8458,
+      "tasa": 0.3131,
+      "AUROC": 0.8098,
+      "TPR": 0.8142,
+      "FPR": 0.3272,
+      "seleccion": 0.4797,
+      "cal_pred": 0.2798,
+      "cal_obs": 0.3131
+    },
+    {
+      "grupo": "YUCATAN",
+      "n": 1517,
+      "tasa": 0.3738,
+      "AUROC": 0.8106,
+      "TPR": 0.8042,
+      "FPR": 0.3126,
+      "seleccion": 0.4964,
+      "cal_pred": 0.2642,
+      "cal_obs": 0.3738
+    },
+    {
+      "grupo": "NUEVO LEON",
+      "n": 3744,
+      "tasa": 0.269,
+      "AUROC": 0.8117,
+      "TPR": 0.7696,
+      "FPR": 0.3047,
+      "seleccion": 0.4298,
+      "cal_pred": 0.2324,
+      "cal_obs": 0.269
+    },
+    {
+      "grupo": "BAJA CALIFORNIA",
+      "n": 1773,
+      "tasa": 0.3644,
+      "AUROC": 0.8118,
+      "TPR": 0.918,
+      "FPR": 0.4508,
+      "seleccion": 0.621,
+      "cal_pred": 0.3675,
+      "cal_obs": 0.3644
+    },
+    {
+      "grupo": "ZACATECAS",
+      "n": 855,
+      "tasa": 0.2667,
+      "AUROC": 0.8161,
+      "TPR": 0.8421,
+      "FPR": 0.386,
+      "seleccion": 0.5076,
+      "cal_pred": 0.2637,
+      "cal_obs": 0.2667
+    },
+    {
+      "grupo": "QUINTANA ROO",
+      "n": 718,
+      "tasa": 0.3175,
+      "AUROC": 0.8189,
+      "TPR": 0.8465,
+      "FPR": 0.3592,
+      "seleccion": 0.5139,
+      "cal_pred": 0.3004,
+      "cal_obs": 0.3175
+    },
+    {
+      "grupo": "BAJA CALIFORNIA SUR",
+      "n": 988,
+      "tasa": 0.1791,
+      "AUROC": 0.8292,
+      "TPR": 0.8023,
+      "FPR": 0.275,
+      "seleccion": 0.3694,
+      "cal_pred": 0.2133,
+      "cal_obs": 0.1791
+    },
+    {
+      "grupo": "PUEBLA",
+      "n": 3056,
+      "tasa": 0.3907,
+      "AUROC": 0.8392,
+      "TPR": 0.9598,
+      "FPR": 0.4323,
+      "seleccion": 0.6384,
+      "cal_pred": 0.3812,
+      "cal_obs": 0.3907
+    },
+    {
+      "grupo": "COLIMA",
+      "n": 693,
+      "tasa": 0.267,
+      "AUROC": 0.8442,
+      "TPR": 0.8811,
+      "FPR": 0.3327,
+      "seleccion": 0.4791,
+      "cal_pred": 0.2783,
+      "cal_obs": 0.267
+    },
+    {
+      "grupo": "QUERETARO",
+      "n": 1662,
+      "tasa": 0.2473,
+      "AUROC": 0.8485,
+      "TPR": 0.8783,
+      "FPR": 0.3253,
+      "seleccion": 0.4621,
+      "cal_pred": 0.274,
+      "cal_obs": 0.2473
+    },
+    {
+      "grupo": "MORELOS",
+      "n": 1707,
+      "tasa": 0.3076,
+      "AUROC": 0.8517,
+      "TPR": 0.941,
+      "FPR": 0.3993,
+      "seleccion": 0.5659,
+      "cal_pred": 0.3358,
+      "cal_obs": 0.3076
+    },
+    {
+      "grupo": "GUANAJUATO",
+      "n": 4088,
+      "tasa": 0.263,
+      "AUROC": 0.8572,
+      "TPR": 0.8958,
+      "FPR": 0.3243,
+      "seleccion": 0.4746,
+      "cal_pred": 0.2722,
+      "cal_obs": 0.263
+    },
+    {
+      "grupo": "OAXACA",
+      "n": 2090,
+      "tasa": 0.2211,
+      "AUROC": 0.8611,
+      "TPR": 0.8485,
+      "FPR": 0.2862,
+      "seleccion": 0.4105,
+      "cal_pred": 0.2314,
+      "cal_obs": 0.2211
+    },
+    {
+      "grupo": "TAMAULIPAS",
+      "n": 2083,
+      "tasa": 0.2386,
+      "AUROC": 0.8643,
+      "TPR": 0.8652,
+      "FPR": 0.2768,
+      "seleccion": 0.4172,
+      "cal_pred": 0.2314,
+      "cal_obs": 0.2386
+    },
+    {
+      "grupo": "SONORA",
+      "n": 2452,
+      "tasa": 0.2492,
+      "AUROC": 0.8681,
+      "TPR": 0.9002,
+      "FPR": 0.3308,
+      "seleccion": 0.4727,
+      "cal_pred": 0.2733,
+      "cal_obs": 0.2492
+    },
+    {
+      "grupo": "CAMPECHE",
+      "n": 599,
+      "tasa": 0.2955,
+      "AUROC": 0.8814,
+      "TPR": 0.9774,
+      "FPR": 0.3839,
+      "seleccion": 0.5593,
+      "cal_pred": 0.3241,
+      "cal_obs": 0.2955
+    },
+    {
+      "grupo": "SAN LUIS POTOSI",
+      "n": 2495,
+      "tasa": 0.2016,
+      "AUROC": 0.889,
+      "TPR": 0.8966,
+      "FPR": 0.3072,
+      "seleccion": 0.4261,
+      "cal_pred": 0.2361,
+      "cal_obs": 0.2016
+    },
+    {
+      "grupo": "GUERRERO",
+      "n": 2046,
+      "tasa": 0.2771,
+      "AUROC": 0.8893,
+      "TPR": 0.9506,
+      "FPR": 0.3577,
+      "seleccion": 0.522,
+      "cal_pred": 0.3034,
+      "cal_obs": 0.2771
+    },
+    {
+      "grupo": "CIUDAD DE MEXICO",
+      "n": 20942,
+      "tasa": 0.1282,
+      "AUROC": 0.8949,
+      "TPR": 0.8577,
+      "FPR": 0.209,
+      "seleccion": 0.2922,
+      "cal_pred": 0.1763,
+      "cal_obs": 0.1282
+    },
+    {
+      "grupo": "TABASCO",
+      "n": 2801,
+      "tasa": 0.1175,
+      "AUROC": 0.9418,
+      "TPR": 0.9301,
+      "FPR": 0.2083,
+      "seleccion": 0.2931,
+      "cal_pred": 0.1783,
+      "cal_obs": 0.1175
+    }
+  ],
+  "interseccional_criterio": {
+    "min_n_usado": 300,
+    "min_n_general": 500,
+    "n_entidades_relajado": 32,
+    "n_entidades_estandar": 31,
+    "rango_relajado": 0.2537,
+    "rango_estandar": 0.2045,
+    "peor_estandar": "CHIHUAHUA",
+    "peor_estandar_auroc": 0.7374,
+    "bajo_criterio": [
+      {
+        "grupo": "CHIAPAS",
+        "n": 482
+      }
+    ]
+  },
+  "max_error_calibracion_crudo": 0.2108,
+  "max_error_calibracion_calibrado": 0.0231,
+  "correlatos": {
+    "auroc_vs_n": {
+      "r": 0.194,
+      "p_r": 0.288,
+      "rho": 0.293,
+      "p_rho": 0.104,
+      "n": 32,
+      "etiqueta": "AUROC vs tamano de muestra"
+    },
+    "auroc_vs_tasa": {
+      "r": -0.373,
+      "p_r": 0.036,
+      "rho": -0.335,
+      "p_rho": 0.061,
+      "n": 32,
+      "etiqueta": "AUROC vs tasa de mortalidad"
+    },
+    "tpr_vs_n": {
+      "r": 0.024,
+      "p_r": 0.896,
+      "rho": 0.123,
+      "p_rho": 0.503,
+      "n": 32,
+      "etiqueta": "TPR   vs tamano de muestra"
+    },
+    "tpr_vs_tasa": {
+      "r": 0.165,
+      "p_r": 0.366,
+      "rho": 0.158,
+      "p_rho": 0.388,
+      "n": 32,
+      "etiqueta": "TPR   vs tasa de mortalidad"
+    }
+  },
+  "disparidad_entidad": {
+    "gap_TPR (equalized odds)": 0.2935,
+    "gap_FPR": 0.0867,
+    "gap_AUROC": 0.0563,
+    "gap_seleccion (paridad demogr.)": 0.1556,
+    "max_error_calibracion": 0.0231
+  },
+  "disparidad_sexo": {
+    "gap_TPR (equalized odds)": 0.0393,
+    "gap_FPR": 0.0268,
+    "gap_AUROC": 0.0082,
+    "gap_seleccion (paridad demogr.)": 0.0448,
+    "max_error_calibracion": 0.0005
+  },
+  "disparidad_edad": {
+    "gap_TPR (equalized odds)": 0.5824,
+    "gap_FPR": 0.3026,
+    "gap_AUROC": 0.0903,
+    "gap_seleccion (paridad demogr.)": 0.4408,
+    "max_error_calibracion": 0.0008
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "n_base_completa": 8830345,
+  "n_cohorte": 2526649,
+  "tasa_def_base_completa": 0.020587,
+  "tasa_hosp_base_completa": 0.064117,
+  "tasa_def_cohorte": 0.056003,
+  "tasa_hosp_cohorte": 0.117818,
+  "faltantes": {
+    "EDAD": 1.3e-05,
+    "sexo_mujer": 0.0,
+    "entidad_nombre": 0.0
+  },
+  "na_comorbilidades": {
+    "DIABETES": 0.00191,
+    "EPOC": 0.001777,
+    "ASMA": 0.001747,
+    "INMUSUPR": 0.001764,
+    "HIPERTENSION": 0.001796,
+    "OTRA_COM": 0.008762,
+    "CARDIOVASCULAR": 0.001768,
+    "OBESIDAD": 0.001687,
+    "RENAL_CRONICA": 0.001765,
+    "TABAQUISMO": 0.00184,
+    "NEUMONIA": 0.00571
+  },
+  "n_hospitalizados": 297685,
+  "defunciones_totales": 141499,
+  "defunciones_ambulatorias": 0,
+  "defunciones_hospitalizadas": 141499,
+  "frac_hospitalizados": 0.117818,
+  "na_informativo": {
+    "razon_max": 2.231,
+    "var_razon_max": "EPOC",
+    "razon_min": 0.0172,
+    "var_razon_min": "NEUMONIA",
+    "mort_con_na_max": 0.1247,
+    "mort_global": 0.056,
+    "por_variable": [
+      {
+        "variable": "DIABETES",
+        "frac_na": 0.00191,
+        "mort_con_na": 0.1142,
+        "mort_sin_na": 0.05589,
+        "razon": 2.0432
+      },
+      {
+        "variable": "EPOC",
+        "frac_na": 0.00178,
+        "mort_con_na": 0.12469,
+        "mort_sin_na": 0.05588,
+        "razon": 2.23144
+      },
+      {
+        "variable": "ASMA",
+        "frac_na": 0.00175,
+        "mort_con_na": 0.11874,
+        "mort_sin_na": 0.05589,
+        "razon": 2.12442
+      },
+      {
+        "variable": "INMUSUPR",
+        "frac_na": 0.00176,
+        "mort_con_na": 0.11777,
+        "mort_sin_na": 0.05589,
+        "razon": 2.10697
+      },
+      {
+        "variable": "HIPERTENSION",
+        "frac_na": 0.0018,
+        "mort_con_na": 0.11439,
+        "mort_sin_na": 0.0559,
+        "razon": 2.04647
+      },
+      {
+        "variable": "OTRA_COM",
+        "frac_na": 0.00876,
+        "mort_con_na": 0.05452,
+        "mort_sin_na": 0.05602,
+        "razon": 0.97333
+      },
+      {
+        "variable": "CARDIOVASCULAR",
+        "frac_na": 0.00177,
+        "mort_con_na": 0.12469,
+        "mort_sin_na": 0.05588,
+        "razon": 2.23139
+      },
+      {
+        "variable": "OBESIDAD",
+        "frac_na": 0.00169,
+        "mort_con_na": 0.11025,
+        "mort_sin_na": 0.05591,
+        "razon": 1.9719
+      },
+      {
+        "variable": "RENAL_CRONICA",
+        "frac_na": 0.00177,
+        "mort_con_na": 0.1222,
+        "mort_sin_na": 0.05589,
+        "razon": 2.18656
+      },
+      {
+        "variable": "TABAQUISMO",
+        "frac_na": 0.00184,
+        "mort_con_na": 0.12282,
+        "mort_sin_na": 0.05588,
+        "razon": 2.19798
+      },
+      {
+        "variable": "NEUMONIA",
+        "frac_na": 0.00571,
+        "mort_con_na": 0.00097,
+        "mort_sin_na": 0.05632,
+        "razon": 0.01723
+      }
+    ]
+  },
+  "na_entidad_min": 0.000165,
+  "na_entidad_max": 0.055478,
+  "na_entidad_min_ent": "QUINTANA ROO",
+  "na_entidad_max_ent": "MEXICO",
+  "na_comorb_min": 0.001687,
+  "na_comorb_max": 0.008762,
+  "na_comorb_max_var": "OTRA_COM",
+  "na_comorb_min_var": "OBESIDAD",
+  "entidad_n_min": 15221,
+  "entidad_n_max": 651956,
+  "entidad_tasa_min": 0.0228,
+  "entidad_tasa_max": 0.1285
+}

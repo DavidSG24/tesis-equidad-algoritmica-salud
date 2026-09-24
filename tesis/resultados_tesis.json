@@ -1,0 +1,187 @@
+{
+  "cohorte": {
+    "n_filas": 2526649,
+    "solo_confirmados": true,
+    "tasa_defuncion": 0.056003
+  },
+  "modelo": {
+    "hparams": {
+      "max_iter": 300,
+      "learning_rate": 0.05,
+      "max_depth": 6,
+      "class_weight": "balanced",
+      "random_state": 42
+    },
+    "auroc_global": 0.9503,
+    "auprc_global": 0.5533,
+    "brier_crudo": 0.0866,
+    "brier_calibrado": 0.0323,
+    "umbral": 0.1562,
+    "sensibilidad_objetivo": 0.8
+  },
+  "mitigacion": [
+    {
+      "metodo": "Baseline (umbral global)",
+      "gap_TPR": 0.294,
+      "gap_FPR": 0.087,
+      "seleccion": 0.1,
+      "bal_acc": 0.868
+    },
+    {
+      "metodo": "PRE (reponderacion entidad)",
+      "gap_TPR": 0.29,
+      "gap_FPR": 0.082,
+      "seleccion": 0.099,
+      "bal_acc": 0.865
+    },
+    {
+      "metodo": "IN (Fairlearn EqOdds)*",
+      "gap_TPR": 0.445,
+      "gap_FPR": null,
+      "seleccion": null,
+      "bal_acc": null
+    },
+    {
+      "metodo": "POST (umbral/entidad)",
+      "gap_TPR": 0.14,
+      "gap_FPR": 0.101,
+      "seleccion": 0.102,
+      "bal_acc": 0.871
+    },
+    {
+      "metodo": "POST (umbral/entidad, en test)",
+      "gap_TPR": 0.022,
+      "gap_FPR": 0.107,
+      "seleccion": 0.101,
+      "bal_acc": 0.869
+    }
+  ],
+  "frontera_pareto": [
+    {
+      "alpha": 0.0,
+      "gap_TPR": 0.2935,
+      "bal_acc": 0.868,
+      "seleccion": 0.1005
+    },
+    {
+      "alpha": 0.1,
+      "gap_TPR": 0.2813,
+      "bal_acc": 0.8672,
+      "seleccion": 0.0987
+    },
+    {
+      "alpha": 0.2,
+      "gap_TPR": 0.2746,
+      "bal_acc": 0.8664,
+      "seleccion": 0.0977
+    },
+    {
+      "alpha": 0.3,
+      "gap_TPR": 0.2491,
+      "bal_acc": 0.8667,
+      "seleccion": 0.0978
+    },
+    {
+      "alpha": 0.4,
+      "gap_TPR": 0.2341,
+      "bal_acc": 0.8693,
+      "seleccion": 0.0993
+    },
+    {
+      "alpha": 0.5,
+      "gap_TPR": 0.2207,
+      "bal_acc": 0.8713,
+      "seleccion": 0.1004
+    },
+    {
+      "alpha": 0.6,
+      "gap_TPR": 0.2207,
+      "bal_acc": 0.8706,
+      "seleccion": 0.0996
+    },
+    {
+      "alpha": 0.7,
+      "gap_TPR": 0.218,
+      "bal_acc": 0.87,
+      "seleccion": 0.0992
+    },
+    {
+      "alpha": 0.8,
+      "gap_TPR": 0.218,
+      "bal_acc": 0.8703,
+      "seleccion": 0.0998
+    },
+    {
+      "alpha": 0.9,
+      "gap_TPR": 0.184,
+      "bal_acc": 0.8695,
+      "seleccion": 0.0999
+    },
+    {
+      "alpha": 1.0,
+      "gap_TPR": 0.1402,
+      "bal_acc": 0.8711,
+      "seleccion": 0.1024
+    }
+  ],
+  "corr_marginacion": {
+    "auroc": {
+      "r": -0.071,
+      "p_r": 0.7,
+      "rho": -0.075,
+      "p_rho": 0.684,
+      "n": 32
+    },
+    "tpr": {
+      "r": -0.178,
+      "p_r": 0.328,
+      "rho": -0.268,
+      "p_rho": 0.138,
+      "n": 32
+    }
+  },
+  "conapo_fuente": "CONAPO, Índices de marginación 2020 (IME_2020.xls), Censo de Población y Vivienda 2020, INEGI",
+  "marginacion_por_grado": [
+    {
+      "grado": "Muy alto",
+      "n_entidades": 3,
+      "AUROC_medio": 0.9485,
+      "TPR_medio": 0.7932
+    },
+    {
+      "grado": "Alto",
+      "n_entidades": 9,
+      "AUROC_medio": 0.9451,
+      "TPR_medio": 0.8084
+    },
+    {
+      "grado": "Medio",
+      "n_entidades": 8,
+      "AUROC_medio": 0.9484,
+      "TPR_medio": 0.8162
+    },
+    {
+      "grado": "Bajo",
+      "n_entidades": 8,
+      "AUROC_medio": 0.9486,
+      "TPR_medio": 0.7936
+    },
+    {
+      "grado": "Muy bajo",
+      "n_entidades": 4,
+      "AUROC_medio": 0.9399,
+      "TPR_medio": 0.7093
+    }
+  ],
+  "in_estabilidad": {
+    "mediana": 0.397,
+    "min": 0.245,
+    "max": 0.628,
+    "n_realizaciones": 20
+  },
+  "kruskal_auroc_grado": {
+    "H": 1.827,
+    "p": 0.768
+  },
+  "conapo_verificado": true
+}

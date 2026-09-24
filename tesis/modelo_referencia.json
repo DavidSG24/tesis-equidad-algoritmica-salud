@@ -1,0 +1,124 @@
+{
+  "n_train": 1515988,
+  "n_calib": 378998,
+  "n_test": 631663,
+  "prevalencia": 0.056003,
+  "desbalance": 16.86,
+  "logit": {
+    "auroc": 0.9489,
+    "auprc": 0.5528,
+    "brier": 0.0819
+  },
+  "hgb_crudo": {
+    "auroc": 0.9504,
+    "auprc": 0.5594,
+    "brier": 0.0866,
+    "riesgo_medio": 0.2054
+  },
+  "hgb_calibrado": {
+    "auroc": 0.9503,
+    "auprc": 0.5533,
+    "brier": 0.0323,
+    "riesgo_medio": 0.0558
+  },
+  "mortalidad_observada_test": 0.056,
+  "umbral": 0.1562,
+  "tpr_objetivo": 0.7952,
+  "fpr_objetivo": 0.0592,
+  "importancia_permutacion": [
+    {
+      "variable": "NEUMONIA_bin",
+      "importancia": 0.1057
+    },
+    {
+      "variable": "EDAD",
+      "importancia": 0.0789
+    },
+    {
+      "variable": "sexo_mujer",
+      "importancia": 0.0029
+    },
+    {
+      "variable": "DIABETES_bin",
+      "importancia": 0.0028
+    },
+    {
+      "variable": "RENAL_CRONICA_bin",
+      "importancia": 0.0016
+    },
+    {
+      "variable": "OBESIDAD_bin",
+      "importancia": 0.0011
+    },
+    {
+      "variable": "OTRA_COM_bin",
+      "importancia": 0.001
+    },
+    {
+      "variable": "HIPERTENSION_bin",
+      "importancia": 0.0009
+    },
+    {
+      "variable": "INMUSUPR_bin",
+      "importancia": 0.0002
+    },
+    {
+      "variable": "TABAQUISMO_bin",
+      "importancia": 0.0001
+    },
+    {
+      "variable": "CARDIOVASCULAR_bin",
+      "importancia": 0.0001
+    },
+    {
+      "variable": "EPOC_bin",
+      "importancia": 0.0
+    },
+    {
+      "variable": "ASMA_bin",
+      "importancia": 0.0
+    }
+  ],
+  "calibracion_deciles": [
+    {
+      "predicho": 0.0003,
+      "observado": 0.0003
+    },
+    {
+      "predicho": 0.0008,
+      "observado": 0.0005
+    },
+    {
+      "predicho": 0.0009,
+      "observado": 0.0011
+    },
+    {
+      "predicho": 0.0019,
+      "observado": 0.002
+    },
+    {
+      "predicho": 0.0032,
+      "observado": 0.003
+    },
+    {
+      "predicho": 0.0061,
+      "observado": 0.0058
+    },
+    {
+      "predicho": 0.011,
+      "observado": 0.0113
+    },
+    {
+      "predicho": 0.0236,
+      "observado": 0.0234
+    },
+    {
+      "predicho": 0.0765,
+      "observado": 0.0761
+    },
+    {
+      "predicho": 0.4441,
+      "observado": 0.4473
+    }
+  ]
+}

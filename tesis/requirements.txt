@@ -1,0 +1,27 @@
+# Dependencias de la tesis — cuadernos 01 a 04 y generación del documento.
+#
+# Versiones FIJAS: son las que produjeron las cifras del documento (véase el
+# apéndice de reproducibilidad). Los rangos abiertos anteriores permitían que una
+# actualización cambiara los resultados en silencio; además, el fallo original al
+# escribir parquet ("A type extension with name pandas.period already defined")
+# fue un choque de versiones entre pandas y pyarrow.
+#
+# Instalar con:  python3 -m pip install -r requirements.txt
+# Requiere Python 3.14 (probado en 3.14.5).
+
+numpy==2.5.1
+pandas==3.0.5
+pyarrow==25.0.0          # motor de parquet
+scikit-learn==1.9.0      # modelos, métricas, calibración isotónica
+scipy==1.18.0            # correlaciones con significancia
+fairlearn==0.14.0        # mitigación in-processing (equalized odds)
+matplotlib==3.11.1       # figuras
+joblib==1.5.3            # persistencia del paquete del modelo
+openpyxl==3.1.5          # lectura del diccionario de datos (.xlsx)
+python-docx==1.2.0       # conversión del protocolo .docx a Markdown
+
+# Ejecución de los cuadernos
+jupyterlab==4.6.2
+ipykernel==7.3.0
+nbclient==0.11.0         # ejecución no interactiva de la cadena
+nbformat==5.10.4

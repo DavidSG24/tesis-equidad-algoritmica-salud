@@ -1,0 +1,55 @@
+% Preámbulo compartido de la tesis.
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-tabla,es-nodecimaldot]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{numprint}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{enumitem}
+\usepackage{csquotes}
+
+\usepackage[letterpaper,top=2.5cm,bottom=2.5cm,left=3cm,right=2.5cm]{geometry}
+
+% Holgura de última instancia: sin ella, los identificadores largos en \texttt
+% (nombres de columna y de artefacto) no se pueden dividir y desbordan el margen.
+\emergencystretch=3em
+\usepackage{setspace}
+\onehalfspacing
+
+% APA 7.ª edición. `maxbibnames=20` implementa la regla de listar hasta 20
+% autores y elidir a partir del 21 (relevante para wynants2020, con 57).
+\usepackage[backend=biber,style=apa,sortcites=true,maxbibnames=20]{biblatex}
+\DeclareLanguageMapping{spanish}{spanish-apa}
+\addbibresource{referencias.bib}
+
+% Los DOI y los títulos largos no admiten división y desbordan el margen en la
+% lista de referencias; alinear a la izquierda lo evita sin tocar las entradas.
+\appto{\bibsetup}{\raggedright}
+
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Estratificacion de riesgo clinico consciente de la equidad},
+  pdfauthor={David Segundo},
+  pdfsubject={Auditoria y mitigacion del sesgo geografico en modelos predictivos de salud},
+}
+
+\graphicspath{{../}}
+
+% Caja para advertencias metodológicas visibles en el cuerpo del texto.
+% xcolor es obligatorio antes de mdframed: la sintaxis de mezcla `black!45`
+% no existe en el paquete `color` que mdframed carga por omisión.
+\usepackage{xcolor}
+\usepackage{mdframed}
+\newmdenv[
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  linewidth=2pt, linecolor=black!45,
+  leftmargin=0pt, innerleftmargin=10pt, innertopmargin=6pt, innerbottommargin=6pt,
+  skipabove=\baselineskip, skipbelow=\baselineskip
+]{aviso}
+
+\newcommand{\nota}[1]{\begin{aviso}\small\textbf{Nota metodológica.} #1\end{aviso}}

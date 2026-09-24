@@ -1,0 +1,120 @@
+\chapter{Conclusiones y trabajo futuro}
+\label{cap:conclusiones}
+
+\section{Conclusiones}
+
+Esta tesis partió de una premisa que la literatura respalda: predecir mortalidad
+por COVID-19 con datos abiertos mexicanos es un problema resuelto. Sobre esa base
+desplazó la pregunta de si el modelo acierta a si acierta por igual, tomando la
+entidad federativa como atributo sensible. Las conclusiones son cinco.
+
+\textbf{Primera: la inequidad geográfica existe y es sustantiva.} Un modelo con
+AUROC de \aurocGlobal{} reparte su sensibilidad de forma muy desigual entre
+estados: la brecha es \gapTPRentidad{} en un punto de operación calibrado para
+detectar el \sensObjetivo\,\% de las defunciones a escala nacional. Traducido, el
+modelo detecta cerca de \entPeorPct{} de cada 100 defunciones en la entidad peor
+servida frente a \entMejorPct{} en la mejor. La disparidad es estadísticamente
+significativa ($p=\pTpr$ frente a la nula por permutación), aunque conviene
+descontar lo que el azar aporta con 32 grupos desiguales: el exceso atribuible a
+la entidad es de unos \excesoTpr. Y ocurre \emph{sin} que la entidad sea un
+predictor del modelo, lo que descarta la solución ingenua de «no usar la
+geografía».
+
+\textbf{Segunda: no se explica por composición demográfica.} Al restringir el
+análisis a adultos de 60 años o más, la brecha no solo persiste sino que se
+amplía. La inequidad es una propiedad del modelo operando sobre poblaciones
+heterogéneas, no un artefacto de la estructura de edades de cada estado.
+
+\textbf{Tercera: en la población completa la disparidad reside en el umbral, no
+en el ordenamiento, y eso determina qué mitigación funciona.} El AUROC por entidad
+es alto en todas y la calibración por entidad es buena (error máximo
+\errCalEntidad); lo que falla es aplicar un corte único a distribuciones de riesgo
+distintas. La salvedad importa: entre los pacientes hospitalizados --la población
+donde el desenlace es posible-- la relación se invierte, con la brecha de AUROC en
+\hospGapAUROC{} y la de sensibilidad en \hospGapTPR, y en el subgrupo de 60 años o
+más la dispersión del AUROC llega a \sesentaRango. El diagnóstico, y con él la
+elección de mitigación, debe hacerse sobre la población en la que se desplegará. Por eso la
+reponderación previa al entrenamiento no cambia nada, la restricción de
+\emph{equalized odds} durante el entrenamiento resulta inestable con 32 grupos
+desiguales, y solo el ajuste de umbrales por entidad reduce la brecha --de
+\gapBase{} a \gapPost, un \reduccionPost\,\%-- y lo hace \emph{sin} costo de
+desempeño agregado (exactitud balanceada de \accBase{} a \accPost). El costo está
+en otra parte y es el que predice la teoría: al igualar la sensibilidad, la brecha
+de falsos positivos crece de \postGapFPRbase{} a \postGapFPR. La mitigación no
+elimina la inequidad; elige cuál de las dos tasas se reparte por igual. La
+recomendación práctica que se desprende es diagnosticar primero dónde vive el
+sesgo --brechas de AUROC frente a brechas de sensibilidad-- y elegir la familia de
+mitigación en consecuencia.
+
+\textbf{Cuarta: la inequidad no es un problema de cobertura de datos.} Al excluir
+por completo una entidad del entrenamiento y evaluar sobre ella, el desempeño
+apenas se mueve --pérdida mediana de AUROC \loeoMediana{} sobre \loeoNent{}
+entidades-- y las brechas no se acentúan. La pérdida además no guarda relación con
+el tamaño de la entidad ($r=\loeoCorrTamr$, $p=\loeoCorrTamp$). Junto con el
+fracaso de la reponderación, esto descarta la explicación más intuitiva: el modelo
+no falla en unos estados por haber visto pocos datos suyos; funciona igual sin
+haber visto ninguno. Tampoco es un efecto de la práctica de registro de la
+variable dominante: al reentrenar sin \texttt{\impPrimeraVar} la brecha de AUROC
+no se reduce, sino que sube a \sinNeuGapAUROC. Lo que produce la inequidad es
+aplicar una regla común a poblaciones distintas.
+
+\textbf{Quinta: la separación metodológica no es un detalle.} Dos decisiones de
+diseño cambian conclusiones sustantivas. Auditar la calibración por grupo sobre
+puntajes sin calibrar habría reportado un error de \errCalCrudo{} y una conclusión de
+«calibración inequitativa» que corresponde en realidad al sesgo global de
+entrenamiento; medido sobre riesgo calibrado, el error es \errCalEntidad{} y la
+calibración por entidad es buena. Y estimar los umbrales de mitigación sobre el
+propio conjunto de prueba habría llevado a declarar la brecha prácticamente
+eliminada (\gapPostOpt) cuando la cifra desplegable es \gapPost, \factorOptimismo{} veces
+mayor.
+
+Estas conclusiones se sostienen dentro de los límites declarados en la
+sección~\ref{sec:alcance} y con las limitaciones de la
+sección~\ref{sec:limitaciones}. En particular, la hipótesis~\ref{h2} queda
+refutada en la forma en que se operacionalizó --el índice de marginación estatal
+no predice el sesgo-- y la hipótesis~\ref{h4} sin poner a prueba, si bien la
+generalización geográfica interna, que es lo más cercano que puede evaluarse sin
+una segunda fuente, resultó buena.
+
+\section{Trabajo futuro}
+\label{sec:trabajo_futuro}
+
+Ordenado por prioridad, entendida como la capacidad de cada tarea para modificar
+las conclusiones anteriores:
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Extender la cuantificación de incertidumbre.} El eje geográfico
+    ya cuenta con intervalos de confianza y prueba de permutación
+    (sección~\ref{sec:incertidumbre_res}); falta hacer lo propio con los subgrupos
+    interseccionales, donde los tamaños son mucho menores y la precisión es la
+    principal duda abierta.
+  \item \textbf{Indicadores de infraestructura de salud.} El índice de
+    marginación de CONAPO ya está incorporado y no explica el sesgo. El paso
+    siguiente es sustituirlo por el mecanismo que \ref{h2} postula en realidad:
+    camas, personal y equipamiento por habitante, idealmente por unidad médica y
+    no por entidad.
+  \item \textbf{Validación externa en la base DGIS.} Es el paso que pone a prueba
+    \ref{h4} y el que la literatura casi nunca da. Tiene un prerrequisito que este
+    trabajo dejó identificado: SAEH es una base de egresos y su población son
+    pacientes hospitalizados, con una prevalencia del desenlace cercana a
+    \hospPrev{} frente a \cohorteTasaDef\,\% aquí. Debe validarse el modelo
+    restringido a hospitalizados (sección~\ref{sec:sensibilidad_res}); usar el de la
+    cohorte completa haría pasar un cambio de espectro por un fallo de
+    transportabilidad. Requiere además reconstruir las once comorbilidades desde
+    los códigos CIE-10 de SAEH, lo que añade desplazamiento de medición al de
+    población.
+  \item \textbf{Validación temporal.} Dividir por olas epidémicas y entrenar en un
+    año para evaluar en otro, con los cortes anuales de la DGE. La generalización
+    geográfica ya se evaluó (sección~\ref{sec:loeo_res}); la temporal no.
+  \item \textbf{Umbrales por grupo con regularización.} Contraer los umbrales de
+    entidades pequeñas hacia el umbral global, en lugar de estimarlos de forma
+    independiente. Es la vía natural para atacar la brecha residual de \gapPost{}
+    sin perseguir ruido.
+  \item \textbf{Sesgo de verificación.} Modelar explícitamente la propensión a la
+    detección por entidad, para separar la inequidad del modelo de la inequidad del
+    proceso de captura.
+  \item \textbf{Desenlace de hospitalización y utilidad clínica.} Extender el
+    análisis al segundo desenlace y añadir análisis de curva de decisión
+    (\emph{net benefit})~\parencite{vickers2006} y explicaciones locales, previstos en
+    el protocolo y no ejecutados.
+\end{enumerate}

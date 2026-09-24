@@ -1,0 +1,257 @@
+% =============================================================================
+%  Referencias de la tesis — formato APA 7 (biblatex-apa + biber).
+%
+%  ESTADO DE VERIFICACIÓN (cotejo realizado el 30 de julio de 2026)
+%  ---------------------------------------------------------------
+%  Las entradas con DOI se generaron automáticamente desde la API de Crossref,
+%  de modo que autoría, título, revista, volumen, número, páginas y año
+%  proceden del registro del editor y no de una transcripción.
+%
+%  Las de conferencia (NeurIPS/NIPS, ITCS) y JMLR no están en Crossref; se
+%  cotejaron contra DBLP, que es la fuente de referencia en computación.
+%
+%  CORRECCIONES DETECTADAS EN EL COTEJO
+%    - becerra2022     : el primer autor es Aldonso Becerra-Sánchez (no
+%                        "Alejandra"); son 7 autores, antes abreviados.
+%    - nejadshamsi2026 : el primer autor es Shayan Nejadshamsi (no "Sina");
+%                        son 6 autores. Impreso 2026-01-06, en línea 2025-12-05.
+%    - geograficos2024 : autoría localizada (6 autores) y DOI asignado; el
+%                        protocolo la daba como anónima.
+%    - mendez2024      : faltaban volumen (7) y número de artículo (1298029).
+%    - zadrozny2002    : faltaban las páginas (694--699).
+%    - hardt2016       : páginas 3315--3323 en las actas de NIPS 2016.
+%    - kleinberg2017   : páginas 43:1--43:23 y DOI de LIPIcs.
+%    - lightgbm2017    : páginas 3146--3154 en las actas de NIPS 2017.
+%    - sklearn2011     : 16 autores, antes abreviados a 5.
+%    - geograficos2024 : páginas 5--18, tomadas del pie del PDF del artículo
+%                        ("Computación y Sistemas, Vol. 28, No. 1, 2024, pp. 5-18");
+%                        no figuran en Crossref ni en el portal OJS. El DOI se
+%                        escribe con la capitalización del editor (CyS).
+%
+%  Sin pendientes bibliográficos.
+% =============================================================================
+
+% --------------------------- Fuentes de datos --------------------------------
+@online{dge,
+  author       = {{Dirección General de Epidemiología}},
+  title        = {Datos abiertos de {COVID-19}},
+  date         = {2022},
+  organization = {Secretaría de Salud, Gobierno de México},
+  url          = {https://www.gob.mx/salud/documentos/datos-abiertos-152127},
+  note         = {Corte anual 2021 y diccionario de datos},
+}
+
+@online{conapo2020,
+  author       = {{Consejo Nacional de Población}},
+  title        = {Índices de marginación 2020},
+  date         = {2021},
+  organization = {Gobierno de México},
+  url          = {https://www.gob.mx/conapo/documentos/indices-de-marginacion-2020-284372},
+  note         = {Archivo por entidad federativa \texttt{IME\_2020.xls}; método de
+                  Distancias Ponderadas al cuadrado (DP2), con base en el Censo
+                  de Población y Vivienda 2020 del INEGI},
+}
+
+@online{dgis,
+  author       = {{Dirección General de Información en Salud}},
+  title        = {Subsistema Automatizado de Egresos Hospitalarios},
+  date         = {2024},
+  organization = {Secretaría de Salud, Gobierno de México},
+  note         = {Series 2008--2024},
+}
+
+% ----------------- Verificadas contra Crossref (con DOI) ---------------------
+
+@article{becerra2022,
+  author       = {Becerra-Sánchez, Aldonso and Rodarte-Rodríguez, Armando and Escalante-García, Nivia I. and Olvera-González, José E. and De la Rosa-Vargas, José I. and Zepeda-Valles, Gustavo and Velásquez-Martínez, Emmanuel de J.},
+  title        = {Mortality Analysis of Patients with COVID-19 in Mexico Based on Risk Factors Applying Machine Learning Techniques},
+  journaltitle = {Diagnostics},
+  volume       = {12},
+  number       = {6},
+  pages        = {1396},
+  date         = {2022},
+  doi          = {10.3390/diagnostics12061396},
+}
+
+@article{mendez2024,
+  author       = {Méndez-Astudillo, Jorge},
+  title        = {The impact of comorbidities and economic inequality on COVID-19 mortality in Mexico: a machine learning approach},
+  journaltitle = {Frontiers in Big Data},
+  volume       = {7},
+  eid          = {1298029},
+  date         = {2024},
+  doi          = {10.3389/fdata.2024.1298029},
+}
+
+@article{geograficos2024,
+  author       = {Maldonado-Sifuentes, Christian E. and Vargas-Santiago, Mariano and Leon-Velasco, Diana A. and Ortega-García, M. Cristina and Ledo-Mezquita, Yoel and Castillo-Velasquez, Francisco A.},
+  title        = {Leveraging Machine Learning to Unveil the Critical Role of Geographic Factors in COVID-19 Mortality in Mexico},
+  journaltitle = {Computación y Sistemas},
+  volume       = {28},
+  number       = {1},
+  pages        = {5--18},
+  date         = {2024},
+  doi          = {10.13053/CyS-28-1-4908},
+}
+
+@article{nejadshamsi2026,
+  author       = {Nejadshamsi, Shayan and H. Chu, Charlene and McGilton, Katherine S and Li, Xiaoxiao and Ronquillo, Charlene and Abbasgholizadeh-Rahimi, Samira},
+  title        = {Evaluation and improvement of algorithmic fairness for COVID-19 severity classification using Explainable Artificial Intelligence-based bias mitigation},
+  journaltitle = {JAMIA Open},
+  volume       = {9},
+  number       = {1},
+  eid          = {ooaf171},
+  date         = {2026},
+  doi          = {10.1093/jamiaopen/ooaf171},
+}
+
+@article{chouldechova2017,
+  author       = {Chouldechova, Alexandra},
+  title        = {Fair Prediction with Disparate Impact: A Study of Bias in Recidivism Prediction Instruments},
+  journaltitle = {Big Data},
+  volume       = {5},
+  number       = {2},
+  pages        = {153--163},
+  date         = {2017},
+  doi          = {10.1089/big.2016.0047},
+}
+
+@article{obermeyer2019,
+  author       = {Obermeyer, Ziad and Powers, Brian and Vogeli, Christine and Mullainathan, Sendhil},
+  title        = {Dissecting racial bias in an algorithm used to manage the health of populations},
+  journaltitle = {Science},
+  volume       = {366},
+  number       = {6464},
+  pages        = {447--453},
+  date         = {2019},
+  doi          = {10.1126/science.aax2342},
+}
+
+@article{riccilara2022,
+  author       = {Ricci Lara, María Agustina and Echeveste, Rodrigo and Ferrante, Enzo},
+  title        = {Addressing fairness in artificial intelligence for medical imaging},
+  journaltitle = {Nature Communications},
+  volume       = {13},
+  number       = {1},
+  eid          = {4581},
+  date         = {2022},
+  doi          = {10.1038/s41467-022-32186-3},
+}
+
+@article{tripod2015,
+  author       = {Collins, Gary S. and Reitsma, Johannes B. and Altman, Douglas G. and Moons, Karel G.M.},
+  title        = {Transparent Reporting of a multivariable prediction model for Individual Prognosis Or Diagnosis (TRIPOD): The TRIPOD Statement},
+  journaltitle = {Annals of Internal Medicine},
+  volume       = {162},
+  number       = {1},
+  pages        = {55--63},
+  date         = {2015},
+  doi          = {10.7326/M14-0697},
+}
+
+@article{vancalster2019,
+  author       = {Van Calster, Ben and McLernon, David J. and van Smeden, Maarten and
+                  Wynants, Laure and Steyerberg, Ewout W.},
+  % Crossref registra al grupo STRATOS como PRIMER autor, lo que alfabetizaba la
+  % entrada bajo "On behalf of..." y rompía la cita en texto. Es una firma de
+  % colaboración, no un autor, y en APA los corchetes tras el título se reservan
+  % para describir el tipo de obra; por eso no se imprime.
+  % Firma completa: "On behalf of Topic Group 'Evaluating diagnostic tests and
+  % prediction models' of the STRATOS initiative".
+  title        = {Calibration: the Achilles heel of predictive analytics},
+  journaltitle = {BMC Medicine},
+  volume       = {17},
+  number       = {1},
+  eid          = {230},
+  date         = {2019},
+  doi          = {10.1186/s12916-019-1466-7},
+}
+
+@article{wynants2020,
+  author       = {Wynants, Laure and Van Calster, Ben and Collins, Gary S and Riley, Richard D and Heinze, Georg and Schuit, Ewoud and Albu, Elena and Arshi, Banafsheh and Bellou, Vanesa and Bonten, Marc M J and Dahly, Darren L and Damen, Johanna A and Debray, Thomas P A and de Jong, Valentijn M T and De Vos, Maarten and Dhiman, Paula and Ensor, Joie and Gao, Shan and Haller, Maria C and Harhay, Michael O and Henckaerts, Liesbet and Heus, Pauline and Hoogland, Jeroen and Hudda, Mohammed and Jenniskens, Kevin and Kammer, Michael and Kreuzberger, Nina and Lohmann, Anna and Levis, Brooke and Luijken, Kim and Ma, Jie and Martin, Glen P and McLernon, David J and Navarro, Constanza L Andaur and Reitsma, Johannes B and Sergeant, Jamie C and Shi, Chunhu and Skoetz, Nicole and Smits, Luc J M and Snell, Kym I E and Sperrin, Matthew and Spijker, René and Steyerberg, Ewout W and Takada, Toshihiko and Tzoulaki, Ioanna and van Kuijk, Sander M J and van Bussel, Bas C T and van der Horst, Iwan C C and Reeve, Kelly and van Royen, Florien S and Verbakel, Jan Y and Wallisch, Christine and Wilkinson, Jack and Wolff, Robert and Hooft, Lotty and Moons, Karel G M and van Smeden, Maarten},
+  title        = {Prediction models for diagnosis and prognosis of covid-19: systematic review and critical appraisal},
+  journaltitle = {BMJ},
+  pages        = {m1328},
+  date         = {2020},
+  doi          = {10.1136/bmj.m1328},
+}
+
+@inproceedings{zadrozny2002,
+  author    = {Zadrozny, Bianca and Elkan, Charles},
+  title     = {Transforming classifier scores into accurate multiclass probability estimates},
+  booktitle = {Proceedings of the eighth ACM SIGKDD international conference on Knowledge discovery and data mining},
+  pages     = {694--699},
+  date      = {2002},
+  doi       = {10.1145/775047.775151},
+  publisher = {ACM},
+}
+
+@article{vickers2006,
+  author       = {Vickers, Andrew J. and Elkin, Elena B.},
+  title        = {Decision Curve Analysis: A Novel Method for Evaluating Prediction Models},
+  journaltitle = {Medical Decision Making},
+  volume       = {26},
+  number       = {6},
+  pages        = {565--574},
+  date         = {2006},
+  doi          = {10.1177/0272989X06295361},
+}
+
+% -------------- Verificadas contra DBLP (sin registro en Crossref) -----------
+@inproceedings{hardt2016,
+  author    = {Hardt, Moritz and Price, Eric and Srebro, Nathan},
+  title     = {Equality of Opportunity in Supervised Learning},
+  booktitle = {Advances in Neural Information Processing Systems 29 (NIPS 2016)},
+  pages     = {3315--3323},
+  date      = {2016},
+  publisher = {Curran Associates},
+}
+
+@inproceedings{kleinberg2017,
+  author    = {Kleinberg, Jon and Mullainathan, Sendhil and Raghavan, Manish},
+  title     = {Inherent Trade-Offs in the Fair Determination of Risk Scores},
+  booktitle = {8th Innovations in Theoretical Computer Science Conference (ITCS 2017)},
+  series    = {Leibniz International Proceedings in Informatics (LIPIcs)},
+  volume    = {67},
+  pages     = {43:1--43:23},
+  date      = {2017},
+  publisher = {Schloss Dagstuhl--Leibniz-Zentrum für Informatik},
+  doi       = {10.4230/LIPIcs.ITCS.2017.43},
+}
+
+@article{sklearn2011,
+  author       = {Pedregosa, Fabian and Varoquaux, Gaël and Gramfort, Alexandre and
+                  Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and
+                  Blondel, Mathieu and Prettenhofer, Peter and Weiss, Ron and
+                  Dubourg, Vincent and Vanderplas, Jake and Passos, Alexandre and
+                  Cournapeau, David and Brucher, Matthieu and Perrot, Matthieu and
+                  Duchesnay, Édouard},
+  title        = {Scikit-learn: Machine Learning in {Python}},
+  journaltitle = {Journal of Machine Learning Research},
+  volume       = {12},
+  pages        = {2825--2830},
+  date         = {2011},
+}
+
+@inproceedings{lightgbm2017,
+  author    = {Ke, Guolin and Meng, Qi and Finley, Thomas and Wang, Taifeng and
+               Chen, Wei and Ma, Weidong and Ye, Qiwei and Liu, Tie-Yan},
+  title     = {{LightGBM}: A Highly Efficient Gradient Boosting Decision Tree},
+  booktitle = {Advances in Neural Information Processing Systems 30 (NIPS 2017)},
+  pages     = {3146--3154},
+  date      = {2017},
+  publisher = {Curran Associates},
+}
+
+% ------------------------------ Informe técnico ------------------------------
+@report{fairlearn2020,
+  author      = {Bird, Sarah and Dudík, Miro and Edgar, Richard and Horn, Brandon
+                 and Lutz, Roman and Milan, Vanessa and Sameki, Mehrnoosh and
+                 Wallach, Hanna and Walker, Kathleen},
+  title       = {Fairlearn: A toolkit for assessing and improving fairness in {AI}},
+  institution = {Microsoft Research},
+  type        = {Informe técnico},
+  number      = {MSR-TR-2020-32},
+  date        = {2020},
+  url         = {https://www.microsoft.com/en-us/research/publication/fairlearn-a-toolkit-for-assessing-and-improving-fairness-in-ai/},
+}

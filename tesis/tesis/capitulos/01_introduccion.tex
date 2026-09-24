@@ -1,0 +1,148 @@
+\chapter{Introducción}
+\label{cap:introduccion}
+
+\section{Planteamiento del problema}
+
+La saturación hospitalaria y la asignación de recursos escasos son retos
+persistentes del sistema de salud mexicano. Contar con herramientas que estimen
+tempranamente el riesgo de un desenlace grave permite priorizar la atención y
+anticipar necesidades de camas y ventiladores. La literatura reciente muestra,
+sin embargo, que el problema puramente predictivo ya está ampliamente resuelto
+para el caso mexicano: existen múltiples modelos con buen
+desempeño~\parencite{becerra2022,mendez2024}.
+
+El problema no abordado es otro. Un modelo puede tener excelente desempeño
+promedio y, al mismo tiempo, ser sistemáticamente menos preciso para habitantes
+de entidades con menor infraestructura, para personas mayores o para un sexo
+determinado. Esta posibilidad no es hipotética: el caso mejor documentado de
+sesgo algorítmico en salud es un modelo de gestión poblacional en Estados Unidos
+que asignaba menos recursos a pacientes afroamericanos con igual carga de
+enfermedad, no por usar la raza como predictor, sino porque el desenlace elegido
+--el gasto sanitario-- estaba ya distorsionado por el acceso
+desigual~\parencite{obermeyer2019}.
+
+En un país tan heterogéneo como México, un modelo entrenado con datos dominados
+por entidades urbanas puede desempeñarse peor justo donde el sistema de salud es
+más débil, amplificando la inequidad en lugar de reducirla. El problema central
+de esta tesis es, por tanto, diagnosticar y corregir la inequidad del modelo
+--especialmente la geográfica-- sin sacrificar de forma inaceptable su utilidad
+clínica.
+
+\section{Preguntas de investigación}
+
+\begin{enumerate}[label=P\arabic*., leftmargin=*]
+  \item Dado un modelo de riesgo con buen desempeño global sobre datos
+    mexicanos, ¿existen disparidades de desempeño entre entidades federativas,
+    grupos etarios y sexos?
+  \item ¿Cómo se relaciona la magnitud del sesgo geográfico con indicadores de
+    infraestructura o marginación de cada entidad?
+  \item ¿Qué técnicas de mitigación --pre, in y post-procesamiento-- reducen
+    mejor esas disparidades, y cuál es el costo en desempeño global expresado
+    como frontera de Pareto?
+  \item ¿Se transfieren tanto el desempeño como la equidad del modelo a una
+    fuente de datos independiente?
+  \item De forma exploratoria, ¿aparecen inequidades adicionales en subgrupos
+    interseccionales, por ejemplo adultos mayores de entidades marginadas?
+\end{enumerate}
+
+\section{Objetivos}
+
+\subsection{Objetivo general}
+
+Desarrollar, auditar y mitigar la equidad --con énfasis en el sesgo geográfico
+entre entidades federativas-- de un modelo de estratificación de riesgo clínico
+basado en datos abiertos de salud de México, valorando la transportabilidad de
+sus hallazgos.
+
+\subsection{Objetivos específicos}
+
+\begin{enumerate}[label=OE\arabic*., leftmargin=*]
+  \item Construir un canal reproducible de ingesta, limpieza y preparación de la
+    base de la DGE, con control estricto de fuga de información.
+  \item Entrenar un modelo de riesgo de referencia con desempeño comparable al
+    estado del arte, como sujeto del análisis de equidad.
+  \item Auditar la equidad del modelo por entidad federativa, sexo y grupo
+    etario, y examinar la asociación del sesgo geográfico con indicadores
+    contextuales.
+  \item Aplicar y comparar técnicas de mitigación en las tres etapas del canal,
+    construyendo la frontera de Pareto entre equidad y desempeño.
+  \item Explorar la equidad en subgrupos interseccionales y traducir los
+    hallazgos a recomendaciones de despliegue.
+\end{enumerate}
+
+\section{Hipótesis}
+
+\begin{enumerate}[label=H\arabic*., ref=H\arabic*, leftmargin=*]
+  \item \label{h1} Un modelo con buen desempeño global presentará disparidades
+    de desempeño entre entidades federativas, medibles por \emph{equalized odds}
+    y calibración por grupo.
+  \item \label{h2} La magnitud del sesgo geográfico se asociará negativamente
+    con la infraestructura de salud de cada entidad: peor desempeño donde hay
+    menos recursos.
+  \item \label{h3} Las técnicas de mitigación reducirán las disparidades con una
+    pérdida de desempeño global inferior a un umbral predefinido, cuantificable
+    mediante la frontera de Pareto.
+  \item \label{h4} El desempeño se transferirá razonablemente a una fuente
+    independiente, pero las disparidades podrían acentuarse, evidenciando la
+    necesidad de recalibrado por contexto.
+\end{enumerate}
+
+\section{Contribuciones}
+
+\begin{enumerate}[leftmargin=*]
+  \item La primera auditoría de equidad geográfica --entidad federativa como
+    atributo sensible-- de un modelo de riesgo clínico entrenado sobre datos
+    abiertos mexicanos.
+  \item Evidencia de que la disparidad geográfica no se explica por composición
+    etaria: persiste al restringir el análisis al subgrupo de 60 años o más.
+  \item Una comparación de las tres familias de mitigación bajo un punto de
+    operación clínico común, que documenta una asimetría relevante: con 32
+    grupos de tamaño muy desigual, solo el post-procesamiento por umbrales de
+    grupo reduce la disparidad de manera apreciable.
+  \item Una frontera de Pareto equidad--desempeño construida con umbrales
+    estimados \emph{fuera de muestra}, y la cuantificación de cuánto optimismo
+    introduce estimarlos en el propio conjunto de prueba.
+  \item Evidencia de que la inequidad no es un problema de cobertura: un modelo
+    que nunca vio una entidad se desempeña en ella casi igual que uno que sí la vio,
+    y las brechas no se acentúan.
+  \item Un canal reproducible con contrato de datos explícito entre etapas
+    (apéndice~\ref{ap:reproducibilidad}).
+\end{enumerate}
+
+\section{Alcance y delimitaciones}
+\label{sec:alcance}
+
+Este documento reporta el trabajo correspondiente a las fases de datos, modelo
+de referencia, auditoría de equidad y mitigación. Para que la lectura de los
+resultados sea correcta, conviene fijar con precisión sus límites:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Cohorte.} Casos COVID confirmados
+    (\texttt{CLASIFICACION\_FINAL} $\in \{1,2,3\}$) del corte anual 2021 de la
+    base de la DGE, $n=\cohorteN$. No se emplea la serie histórica completa.
+  \item \textbf{Desenlace.} Mortalidad. La hospitalización se deriva y se
+    describe en el análisis exploratorio, pero no se modela en este documento.
+    En esta cohorte fallecer implica estar registrado como hospitalizado, de modo
+    que el desenlace solo es posible en el \fracHosp\,\% de los casos; la
+    sección~\ref{sec:sensibilidad_res} analiza las consecuencias.
+  \item \textbf{Validación externa.} La transportabilidad a la base de Egresos
+    Hospitalarios de la DGIS, que sustenta \ref{h4}, \emph{no} se ha ejecutado, y
+    \ref{h4} se reporta como trabajo pendiente (sección~\ref{sec:trabajo_futuro}).
+    Sí se evalúa la generalización geográfica dentro de la misma fuente
+    (sección~\ref{sec:loeo_res}), que no la sustituye.
+  \item \textbf{Indicadores contextuales.} El examen de \ref{h2} se apoya en
+    el índice de marginación por entidad de CONAPO 2020~\parencite{conapo2020}, que es
+    un agregado socioeconómico estatal. No se emplearon indicadores de
+    infraestructura de salud por unidad médica, que serían el \emph{proxy} más
+    directo del mecanismo que \ref{h2} postula.
+  \item \textbf{Interpretabilidad.} Se emplea importancia por permutación. No se
+    calcularon valores SHAP ni análisis de curva de decisión.
+  \item \textbf{Incertidumbre.} Las brechas del eje geográfico se acompañan de
+    intervalos de confianza por remuestreo y de una prueba de permutación
+    (sección~\ref{sec:incertidumbre}). Los subgrupos interseccionales, en cambio,
+    se reportan como estimaciones puntuales.
+\end{itemize}
+
+\nota{Los límites anteriores no son concesiones retóricas. Cualquier afirmación
+de esta tesis que dependa de \ref{h4} o de intervalos de confianza está marcada
+como preliminar en el punto donde aparece.}

@@ -1,0 +1,250 @@
+\chapter{Discusión}
+\label{cap:discusion}
+
+\section{Evaluación de las hipótesis}
+
+\subsection*{H1: disparidades entre entidades federativas}
+
+\textbf{Sostenida.} Un modelo con AUROC de \aurocGlobal{} presenta una brecha de
+sensibilidad de \gapTPRentidad{} y una brecha de AUROC de \gapAUROCentidad{} entre
+entidades. La disparidad persiste al restringir el análisis a adultos de 60 años o
+más, donde el rango de AUROC va de \sesentaPeorAUROC{} a \sesentaMejorAUROC, lo
+que descarta que sea un reflejo de la composición etaria de los estados.
+
+Resiste además dos pruebas de robustez que podrían haberla desmentido. En el
+subconjunto hospitalizado --la población en la que el desenlace es posible-- no
+solo persiste sino que la brecha de AUROC casi se triplica, hasta \hospGapAUROC{}
+(sección~\ref{sec:sensibilidad_res}). Y no se debe a la composición del
+entrenamiento: un modelo que nunca vio una entidad rinde en ella casi igual que
+uno que sí la vio (sección~\ref{sec:loeo_res}).
+
+La formulación original hablaba de disparidades «estadísticamente
+significativas», y esa cualificación ahora sí puede sostenerse. Ninguna de las
+\boP{} reasignaciones al azar de la etiqueta de entidad produjo una brecha tan
+grande como la observada, ni en AUROC ni en sensibilidad ($p=\pAuroc$ y
+$p=\pTpr$, el mínimo alcanzable con ese número de permutaciones), y
+\paresPct\,\% de los pares de entidades tienen intervalos de AUROC disjuntos
+(sección~\ref{sec:incertidumbre_res}).
+
+El contraste obliga además a matizar la magnitud. La brecha nula no es cero: con
+32 grupos desiguales, el azar produce una separación mediana de \nulaTpr{} en
+sensibilidad. El exceso atribuible a la entidad es de unos \excesoTpr, no los
+\gapTPRentidad{} completos. Sigue siendo una disparidad grande, pero conviene
+reportarla contra la referencia correcta y no contra cero.
+
+\subsection*{H2: asociación con la infraestructura o marginación}
+
+\textbf{No sostenida.} El índice de marginación de CONAPO 2020 no muestra
+asociación detectable con el desempeño por entidad ($r=\corrMargAurocr$,
+$p=\corrMargAurocp$), y el resultado se sostiene al agregar por grado de
+marginación, donde una prueba de Kruskal--Wallis tampoco detecta diferencia
+($H=\kruskalH$, $p=\kruskalP$). El grupo con menor AUROC medio es, de hecho, el
+de marginación \emph{muy baja}: si hay una tendencia, apunta en dirección
+opuesta a la hipótesis.
+
+Cabe una advertencia sobre el alcance de esta conclusión. La ausencia de
+asociación con un índice compuesto no equivale a ausencia de mecanismo
+estructural: la marginación socioeconómica agregada por entidad es un
+\emph{proxy} grueso de lo que importaría aquí, que es la capacidad de registro y
+atención de las unidades médicas. \ref{h2} queda refutada en la forma en que se
+operacionalizó, no en su intuición de fondo.
+
+El único correlato que alcanza significación convencional es la tasa de mortalidad
+de la entidad ($r=\corrAurocTasar$, $p=\corrAurocTasap$): el modelo discrimina
+peor donde más gente muere. Conviene no sobrevalorarlo: se examinaron tres
+características por dos métricas y dos estadísticos, de modo que un único
+$p$ apenas por debajo de 0.05 en una docena de contrastes no sobrevive a ninguna
+corrección por multiplicidad. Se reporta como señal a investigar, no como
+hallazgo confirmatorio. Esta asociación admite al menos dos lecturas que el diseño actual no puede
+separar. Puede reflejar un mecanismo de \emph{atención}: en entidades con sistemas
+más presionados, la muerte depende más de factores no capturados por el modelo
+--disponibilidad de cama, oportunidad del traslado, saturación-- y menos del perfil
+clínico inicial, de modo que hay un techo real a lo que la edad y las
+comorbilidades pueden predecir. Y puede reflejar un mecanismo de \emph{registro}:
+una mortalidad observada más alta puede indicar subdetección de casos leves, lo que
+cambia la composición de la cohorte y con ella la dificultad de la tarea.
+Distinguir ambas requiere indicadores de infraestructura por unidad médica, no por
+entidad.
+
+\subsection*{H3: mitigación con pérdida acotada de desempeño}
+
+\textbf{Sostenida, con una precisión importante.} El post-procesamiento por
+umbrales de entidad reduce la brecha de sensibilidad de \gapBase{} a \gapPost{}
+--\reduccionPost\,\%-- sin pérdida de desempeño agregado: la exactitud balanceada
+pasa de \accBase{} a \accPost. La frontera de Pareto muestra que el desempeño se
+mantiene en la banda \paretoAccMin--\paretoAccMax{} en todo su recorrido, de modo que la pérdida es
+inferior a cualquier umbral razonable que se hubiera fijado de antemano.
+
+Hay, sin embargo, un costo que la exactitud balanceada no captura y que conviene
+enunciar: al igualar la sensibilidad entre entidades, la brecha de \emph{tasa de
+falsos positivos} empeora, de \postGapFPRbase{} a \postGapFPR. No es un defecto
+del método sino exactamente lo que predice el teorema de imposibilidad
+(capítulo~\ref{cap:marco}): con prevalencias distintas entre grupos, igualar una
+de las dos tasas de \emph{equalized odds} desiguala la otra. Lo que el
+post-procesamiento hace no es eliminar la inequidad, sino \emph{elegir} cuál de
+las dos se reparte por igual --y elegir la sensibilidad, en un instrumento cuyo
+costo de omitir una defunción excede al de una alarma innecesaria, es defendible.
+Pero es una elección normativa que debe declararse, no un óptimo técnico.
+
+La segunda precisión es que la mitigación \emph{no elimina} la disparidad. Una
+brecha residual de \gapPost{} sigue siendo clínicamente relevante. Y el hallazgo
+metodológico que acompaña al resultado es que la cifra de eliminación casi total
+que se obtiene ajustando umbrales sobre el propio conjunto de prueba
+(\gapPostOpt) es un artefacto de ajuste en muestra. Un trabajo que no separase el
+bloque de calibración concluiría que el problema queda resuelto, cuando la brecha
+desplegable es \factorOptimismo{} veces mayor.
+
+\subsection*{H4: transportabilidad a una fuente independiente}
+
+\textbf{Sin poner a prueba, con evidencia parcial en la dirección contraria a lo
+esperado.} La validación externa en la base de Egresos Hospitalarios de la DGIS no
+se ha ejecutado, de modo que \ref{h4} tal como está redactada --transferencia a
+una \emph{fuente independiente}-- no queda ni sostenida ni refutada.
+
+Sí se puso a prueba la generalización geográfica dentro de la misma fuente
+(sección~\ref{sec:loeo_res}), y el resultado va en contra de lo que \ref{h4}
+anticipaba: al excluir por completo una entidad del entrenamiento, el desempeño
+sobre ella apenas cambia (pérdida mediana \loeoMediana) y las disparidades no se
+acentúan, sino que se mantienen o se reducen. Esto acota la hipótesis: si las
+disparidades llegaran a agravarse en la base DGIS, no sería por no haber visto la
+entidad, sino por el cambio de fuente, de definición de caso o de periodo.
+
+La ejecución futura de \ref{h4} tiene además un prerrequisito que este trabajo
+identificó y conviene dejar escrito. SAEH es una base de \emph{egresos}: su
+población son pacientes hospitalizados, con una prevalencia del desenlace cercana
+a \hospPrev{} frente a \cohorteTasaDef\,\% en esta cohorte. Aplicar sobre ella el
+modelo principal produciría una caída de desempeño atribuible al cambio de
+espectro y no a la transportabilidad. La validación externa debe hacerse con el
+modelo restringido a hospitalizados de la sección~\ref{sec:sensibilidad_res}, no
+con el de la cohorte completa.
+
+\section{Asimetría entre familias de mitigación}
+
+El resultado comparativo tiene, a nuestro juicio, valor propio. Las tres familias
+de mitigación se presentan habitualmente como alternativas de eficacia
+comparable, a elegir según restricciones operativas. En este problema la
+diferencia es cualitativa: el pre-procesamiento no mueve la brecha, el
+in-procesamiento arroja un resultado tan disperso que no permite concluir nada
+--su rango entre realizaciones, $[\inMin, \inMax]$, contiene a la línea de
+base-- y solo el post-procesamiento la reduce, a la mitad y sin costo agregado.
+
+La explicación está en la naturaleza del sesgo. La disparidad no proviene de un
+ordenamiento defectuoso: el AUROC por entidad es alto en todas
+(\entPeorAUROC--\entMejorAUROC), y el modelo está bien calibrado en cada una
+(error máximo \errCalEntidad). Proviene de aplicar un \emph{corte único} a
+distribuciones de riesgo que difieren entre entidades. Cuando el defecto está en
+la regla de decisión y no en la función de puntuación, la intervención que corrige
+la regla de decisión es la que funciona. Reponderar los datos de entrenamiento
+ataca un problema de representación que aquí no es el que causa la brecha.
+
+Esto sugiere una heurística transferible: antes de elegir la familia de
+mitigación, conviene diagnosticar si la inequidad reside en el ordenamiento
+--brechas de AUROC grandes-- o en el umbral --AUROC similar con brechas de TPR
+grandes. Aquí la brecha de sensibilidad (\gapTPRentidad) es \razonBrechas{} veces
+la de AUROC (\gapAUROCentidad), lo que apuntaba al umbral desde el diagnóstico.
+Ese diagnóstico, sin embargo, es específico de la cohorte completa. Entre los
+pacientes hospitalizados la relación se invierte --la brecha de AUROC sube a
+\hospGapAUROC{} y la de sensibilidad baja a \hospGapTPR-- y en el subgrupo de 60
+años o más la dispersión del AUROC llega a \sesentaRango. La heurística, por
+tanto, no es «diagnostíquese una vez», sino «diagnostíquese en la población sobre
+la que se va a desplegar»: en la población en riesgo, una mitigación basada solo
+en umbrales sería insuficiente.
+
+\section{Implicaciones para el despliegue}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Un umbral nacional único no es una decisión neutral.} Es una
+    decisión que redistribuye sensibilidad entre entidades. Conviene precisar en qué
+    dirección: la sensibilidad por entidad \emph{no} está asociada a su mortalidad
+    ($r=\corrTprTasar$, $p=\corrTprTasap$), de modo que el reparto no penaliza
+    sistemáticamente a los estados con más defunciones; lo que sí decae en ellos es
+    la discriminación ($r=\corrAurocTasar$, $p=\corrAurocTasap$). La inequidad de
+    sensibilidad no sigue un eje interpretable, y eso la hace más difícil de
+    justificar, no menos: la neutralidad aparente de «el mismo umbral para todos»
+    reparte la protección de forma esencialmente arbitraria entre estados.
+  \item \textbf{La frontera de Pareto es el entregable adecuado para el
+    regulador.} La elección de $\alpha$ es normativa. El análisis técnico puede
+    mostrar que no cuesta desempeño agregado; no puede decidir cuánta
+    diferenciación por entidad es aceptable en términos de equidad horizontal
+    entre ciudadanos.
+  \item \textbf{Umbrales por entidad plantean una objeción legítima.} Usar la
+    residencia en el momento de la decisión implica tratar de forma distinta a dos
+    pacientes con idéntico perfil clínico. La justificación es que el trato
+    formalmente idéntico ya produce resultados desiguales; pero es un argumento que
+    debe hacerse explícito ante un comité de ética, no asumirse.
+  \item \textbf{La calibración debe verificarse antes de auditar equidad.} Como
+    muestra el capítulo~\ref{cap:resultados}, auditar sobre puntajes descalibrados
+    habría producido una conclusión invertida sobre la calibración por grupo.
+  \item \textbf{Humano en el circuito.} Con una tasa de selección de \selGlobal{} y un
+    valor predictivo positivo modesto en el punto de operación, el instrumento es
+    de priorización y no de decisión automatizada.
+\end{enumerate}
+
+\section{Relación con la literatura}
+
+El modelo de referencia coincide con la literatura sobre esta
+base~\parencite{becerra2022,mendez2024} en las variables que resultan más
+informativas --neumonía y edad-- lo que respalda que el sujeto de la auditoría sea
+representativo y no un modelo debilitado. Una comparación numérica directa del
+desempeño no es posible, porque esos trabajos reportan exactitud y $F_1$ sobre
+umbrales no declarados y esta tesis reporta AUROC y sensibilidad en un punto de
+operación explícito.
+
+Respecto del trabajo que estudia los factores geográficos como
+predictores~\parencite{geograficos2024}, los resultados de esta tesis son
+complementarios y no contradictorios. Que la entidad sea informativa como
+predictor y que el modelo sea desigualmente preciso entre entidades son hechos
+distintos; el segundo es el que importa para el despliegue responsable, y es el
+que no se había medido. Es de notar que el modelo auditado aquí \emph{no} usa la
+entidad como predictor, y aun así su desempeño depende de ella: la inequidad
+geográfica no requiere que la geografía entre al modelo.
+
+Frente a la literatura de equidad en salud anclada en otros
+contextos~\parencite{nejadshamsi2026,riccilara2022}, la aportación es el traslado del
+marco a un atributo sensible --la entidad federativa-- con significado
+institucional propio en México, donde la desigualdad entre estados es un rasgo
+estructural del sistema y no una variable de composición poblacional. Que el
+índice de marginación no explique la brecha no debilita esa elección: confirma
+que la entidad captura algo que los agregados socioeconómicos estatales no
+miden, y esa es precisamente la razón para auditarla como atributo propio.
+
+\section{Limitaciones}
+\label{sec:limitaciones}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Sin validación externa.} Todo el análisis vive en una fuente y un
+    año. La generalización geográfica interna sí se evaluó
+    (sección~\ref{sec:loeo_res}) y resultó buena, pero no sustituye a una segunda
+    fuente.
+  \item \textbf{El desenlace vive en el \fracHosp\,\% de la cohorte.} Fallecer
+    implica estar registrado como hospitalizado, de modo que parte de la
+    discriminación del modelo principal es separar ambulatorios de hospitalizados.
+    Las cifras comparables con modelos clínicos de mortalidad son las de la
+    sección~\ref{sec:sensibilidad_res}, no las de la cohorte completa.
+  \item \textbf{Incertidumbre acotada solo en el eje principal.} La auditoría
+    por entidad se acompaña de intervalos de confianza y prueba de permutación,
+    pero los subgrupos interseccionales y los ejes de sexo y edad se reportan como
+    estimaciones puntuales. El ordenamiento fino de la tabla~\ref{tab:entidad}
+    tampoco debe leerse posición por posición: solo \paresPct\,\% de los pares
+    tienen intervalos disjuntos.
+  \item \textbf{Marginación medida a escala estatal.} El índice de CONAPO está
+    verificado, pero agrega condiciones socioeconómicas por entidad. El mecanismo
+    que \ref{h2} postula --capacidad de atención-- opera a escala de unidad médica,
+    de modo que la ausencia de asociación acota la hipótesis pero no la cierra.
+  \item \textbf{Un solo año y un solo desenlace.} No se modela hospitalización ni
+    se evalúa estabilidad temporal entre olas epidémicas, cuya composición de casos
+    y presión hospitalaria difieren de forma conocida.
+  \item \textbf{Sesgo de verificación en la cohorte.} Restringir a casos
+    confirmados condiciona a haber sido detectado y probado, y la propensión a
+    detectar varía entre entidades. Parte de la disparidad observada puede
+    originarse en el proceso de captura y no en el modelo. Este es, a nuestro
+    juicio, el supuesto más frágil del diseño y no puede corregirse dentro de esta
+    fuente.
+  \item \textbf{Dependencia de una variable.} Con \texttt{NEUMONIA} concentrando
+    la importancia, un cambio en la práctica de registro entre entidades se
+    traduciría directamente en desempeño desigual. Falta el análisis de
+    sensibilidad que lo descarte.
+  \item \textbf{Validación por partición aleatoria.} No se realizó validación
+    temporal ni dejando-una-entidad-fuera, que es el diseño natural para evaluar
+    generalización geográfica.
+\end{enumerate}

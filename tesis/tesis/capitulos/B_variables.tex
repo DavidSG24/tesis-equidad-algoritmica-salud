@@ -1,0 +1,79 @@
+\chapter{Variables y codificación}
+\label{ap:variables}
+
+\section{Codificación de la fuente}
+
+La base de la DGE codifica las variables categóricas con enteros y reserva valores
+especiales para la ausencia de dato:
+
+\begin{table}[htbp]
+\centering
+\caption{Códigos de la fuente relevantes para este trabajo.}
+\label{tab:codigos}
+\small
+\begin{tabular}{l p{10.2cm}}
+\toprule
+Variable & Codificación \\
+\midrule
+Comorbilidades y signos & $1=$ sí; $2=$ no; $97=$ no aplica; $98=$ se ignora; $99=$ no especificado \\
+\texttt{SEXO} & $1=$ mujer; $2=$ hombre; $99=$ no especificado \\
+\texttt{TIPO\_PACIENTE} & $1=$ ambulatorio; $2=$ hospitalizado; $99=$ no especificado \\
+\texttt{FECHA\_DEF} & Fecha de defunción; \texttt{9999-99-99} indica paciente vivo \\
+\texttt{CLASIFICACION\_FINAL} & $1,2,3=$ caso COVID confirmado; $6=$ sospechoso; $7=$ negativo \\
+\texttt{ENTIDAD\_RES} & $1$--$32$ entidades federativas; $97$--$99$ desconocido \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Variables derivadas}
+
+\begin{table}[htbp]
+\centering
+\caption{Variables construidas y su papel en el análisis.}
+\label{tab:derivadas}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{3.5cm} p{3.2cm} p{7.4cm}}
+\toprule
+Variable & Papel & Definición \\
+\midrule
+\texttt{defuncion} & Desenlace &
+$1$ si \texttt{FECHA\_DEF} $\neq$ \texttt{9999-99-99} \\
+\texttt{hospitalizado} & Desenlace (no modelado) &
+$1$ si \texttt{TIPO\_PACIENTE} $=2$ \\
+\texttt{EDAD} & Predictor &
+Valores fuera de $[0,120]$ marcados como faltantes \\
+\texttt{sexo\_mujer} & Predictor y atributo sensible &
+$1=$ mujer, $0=$ hombre, faltante si $99$ \\
+\texttt{<comorbilidad>\_bin} & Predictor &
+$1$ si el código es $1$; $0$ si es $2$; faltante en otro caso \\
+\texttt{<comorbilidad>\_na} & Indicador de calidad &
+$1$ si el código original es $97$, $98$ o $99$ \\
+\texttt{entidad\_nombre} & Atributo sensible &
+Nombre de la entidad de residencia; eje central de la auditoría \\
+\texttt{grupo\_edad} & Atributo sensible &
+Cortes 0--17, 18--39, 40--59, 60 o más \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Predictores admitidos y variables excluidas}
+
+Los trece predictores del modelo son la edad, el indicador de sexo y las once
+comorbilidades binarizadas: diabetes, EPOC, asma, inmunosupresión, hipertensión,
+otra comorbilidad, enfermedad cardiovascular, obesidad, enfermedad renal crónica,
+tabaquismo y neumonía.
+
+Quedan excluidas por posterioridad al punto de predicción, y por tanto por riesgo
+de fuga de información: \texttt{UCI}, \texttt{INTUBADO} y \texttt{FECHA\_DEF}
+--salvo como origen del desenlace-- así como \texttt{TIPO\_PACIENTE} en su papel de
+predictor de mortalidad. La entidad de residencia y el grupo etario se excluyen
+por una razón distinta: se reservan como atributos sensibles para la auditoría, no
+por fuga.
+
+Los indicadores \texttt{\_na} no se emplean como predictores en el modelo
+reportado, pero se conservan en el conjunto de datos porque el dato faltante
+resulta informativo y su frecuencia difiere entre entidades por un margen amplio
+--de \naEntMin\,\% a \naEntMax\,\%--, lo que constituye un mecanismo plausible de
+inequidad. El capítulo~\ref{cap:resultados} lo documenta; explotarlo o corregirlo
+queda como trabajo futuro.

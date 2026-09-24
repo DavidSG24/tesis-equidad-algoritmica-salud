@@ -1,0 +1,196 @@
+\chapter{Marco teórico y trabajos relacionados}
+\label{cap:marco}
+
+\section{Modelos de riesgo clínico y su evaluación}
+
+Un modelo de estratificación de riesgo estima la probabilidad de un desenlace
+--aquí, la defunción-- a partir de información disponible en el momento en que se
+toma la decisión clínica. Su evaluación exige separar dos propiedades que se
+confunden con frecuencia.
+
+La \textbf{discriminación} mide la capacidad de ordenar pacientes por riesgo y se
+resume en el AUROC. Es insensible a transformaciones monótonas del puntaje: un
+modelo puede discriminar perfectamente y, aun así, emitir probabilidades
+absurdas. La \textbf{calibración} mide justamente eso: si de cada cien pacientes
+a quienes el modelo asigna un riesgo de 20\,\% fallecen efectivamente veinte. Se
+ha argumentado con razón que la calibración es el talón de Aquiles de la
+analítica predictiva en medicina, porque un modelo descalibrado desplaza
+sistemáticamente las decisiones de umbral sin que el AUROC lo
+delate~\parencite{vancalster2019}. Esta distinción es central en el
+capítulo~\ref{cap:resultados}: el modelo de referencia de esta tesis discrimina
+bien desde el principio, pero requiere recalibrado explícito antes de poder
+auditarse.
+
+En cohortes con desenlaces poco frecuentes, el AUPRC complementa al AUROC porque
+es sensible al desbalance de clases. Y como toda métrica agregada oculta la
+distribución de errores, la evaluación de un modelo destinado al despliegue debe
+reportarse en el \emph{punto de operación} previsto y no en un umbral arbitrario.
+Las guías de reporte de modelos predictivos en salud recogen estos requisitos de
+manera sistemática~\parencite{tripod2015}, y la revisión crítica de modelos
+pronósticos de COVID-19 documentó que su incumplimiento fue masivo durante la
+pandemia: la mayoría de los modelos revisados presentaban alto riesgo
+de sesgo, principalmente por selección de cohorte, fuga de información y ausencia
+de validación~\parencite{wynants2020}.
+
+\section{Aprendizaje automático sobre datos tabulares}
+
+Para datos tabulares heterogéneos, los ensambles de árboles con impulso del
+gradiente siguen siendo el punto de referencia práctico frente a arquitecturas
+neuronales. Las implementaciones basadas en histogramas agrupan los valores de
+cada variable en cubetas antes de buscar los cortes, lo que reduce el costo de
+entrenamiento de forma sustancial y las hace viables en millones de
+registros~\parencite{lightgbm2017}. En esta tesis se emplea
+\texttt{HistGradientBoostingClassifier} de \emph{scikit-learn}~\parencite{sklearn2011},
+que además maneja valores faltantes de forma nativa. Es una propiedad relevante
+aquí, porque la codificación de ausencia de la base de la DGE resulta informativa
+--el capítulo~\ref{cap:resultados} lo cuantifica-- y no conviene imputarla a
+ciegas.
+
+El desbalance de clases se atiende reponderando la función de pérdida. Esa
+decisión tiene una consecuencia poco discutida: los puntajes resultantes dejan de
+ser probabilidades calibradas y sobreestiman el riesgo absoluto. La corrección
+estándar es una transformación monótona ajustada sobre datos no vistos, como la
+regresión isotónica~\parencite{zadrozny2002}. Por ser monótona, preserva el
+ordenamiento --y con él el AUROC-- mientras corrige el nivel.
+
+\section{Equidad algorítmica}
+
+\subsection{Definiciones}
+
+Sea $A$ un atributo sensible, $Y$ el desenlace observado, $\hat{Y}$ la predicción
+binaria y $R$ el puntaje de riesgo. Las tres familias de criterios que se emplean
+en esta tesis son:
+
+\begin{description}[leftmargin=*,style=nextline]
+  \item[Paridad demográfica (independencia)]
+    $P(\hat{Y}=1 \mid A=a)$ constante en $a$. Iguala la tasa de selección entre
+    grupos, sin condicionar al desenlace.
+  \item[\emph{Equalized odds} (separación)]
+    $P(\hat{Y}=1 \mid Y=y, A=a)$ constante en $a$ para $y\in\{0,1\}$; es decir,
+    igualdad simultánea de sensibilidad (TPR) y tasa de falsos positivos
+    (FPR)~\parencite{hardt2016}. Su relajación a $y=1$ --igualdad de
+    oportunidades-- es la que más importa clínicamente: significa que el modelo
+    detecta a quien va a fallecer con la misma probabilidad en todos los grupos.
+  \item[Calibración por grupo (suficiencia)]
+    $P(Y=1 \mid R=r, A=a)$ constante en $a$. Significa que un riesgo de 0.3
+    quiere decir lo mismo en cada entidad federativa.
+\end{description}
+
+\subsection{El teorema de imposibilidad}
+
+Estos criterios no pueden satisfacerse a la vez. Cuando la prevalencia del
+desenlace difiere entre grupos y el clasificador no es perfecto, calibración por
+grupo y \emph{equalized odds} son mutuamente
+incompatibles~\parencite{chouldechova2017,kleinberg2017}.
+
+El resultado no es un tecnicismo, y conviene enunciar con precisión la forma que
+toma aquí. Las tasas de mortalidad por entidad difieren por un factor de
+\entFactorTasa, de modo que sobre un puntaje bien calibrado ningún conjunto de
+reglas de decisión puede igualar \emph{a la vez} la sensibilidad y la tasa de
+falsos positivos entre entidades. Sí puede igualarse \emph{una} de las dos: un
+umbral por grupo deja intacta la calibración --que es propiedad del puntaje y no
+de la regla-- y permite escoger cuál de las dos tasas se reparte por igual, a
+costa de desigualar la otra. Es lo que ocurre en el capítulo~\ref{cap:resultados}.
+La elección entre criterios es, por tanto, normativa y no estadística, y por eso
+el entregable adecuado no es un único modelo «justo» sino una frontera que
+explicite el intercambio.
+
+\subsection{Mitigación}
+
+Las técnicas se clasifican por la etapa del canal en la que intervienen:
+
+\begin{description}[leftmargin=*,style=nextline]
+  \item[Pre-procesamiento] Modifican los datos antes de entrenar: reponderación
+    de muestras, remuestreo o corrección de representación. Son agnósticas al
+    modelo, pero solo actúan sobre el desequilibrio de representación.
+  \item[In-procesamiento] Incorporan la restricción de equidad en la
+    optimización. La reducción por gradiente exponenciado convierte el problema
+    restringido en una secuencia de problemas ponderados y admite restricciones
+    de \emph{equalized odds}~\parencite{fairlearn2020}.
+  \item[Post-procesamiento] Ajustan la regla de decisión sobre un modelo ya
+    entrenado, típicamente eligiendo un umbral por grupo~\parencite{hardt2016}. Son
+    las más eficaces cuando el problema no es el ordenamiento sino dónde se corta,
+    y las más controvertidas porque usan el atributo sensible en el momento de la
+    decisión.
+\end{description}
+
+Un problema abierto especialmente pertinente aquí es la equidad de subgrupos
+pequeños: al desagregar por 32 entidades, los estados con menos registros
+producen estimaciones de TPR con varianza alta, y los métodos que optimizan
+brechas máximas tienden a perseguir ruido.
+
+\section{Trabajos relacionados y vacío de investigación}
+
+\subsection{La parte predictiva mexicana está saturada}
+
+Varios trabajos revisados por pares construyen modelos de riesgo sobre la base
+abierta mexicana con buen desempeño. \textcite{becerra2022} comparan modelos sobre datos mexicanos y alcanzan
+alrededor de 90\,\% de exactitud, identificando neumonía, edad avanzada e
+intubación como principales factores asociados a la mortalidad.
+\textcite{mendez2024} aplica \emph{random forest} y XGBoost sobre
+más de veinte millones de observaciones y concluye que diabetes e hipertensión,
+junto con la desigualdad económica, definen la mortalidad.
+
+La implicación metodológica es directa: replicar el esquema «clasificador más
+atribución de importancia sobre comorbilidades» sería un trabajo derivativo. Por
+eso el modelo predictivo se adopta aquí como línea de base y no como aportación.
+
+\nota{La variable \texttt{INTUBADO} que aparece entre los factores más
+informativos en parte de esta literatura describe el curso hospitalario y no está
+disponible al primer contacto. Usarla como predictor de mortalidad en ese punto
+constituye
+fuga de información. Esta tesis la excluye explícitamente
+(sección~\ref{sec:fuga}).}
+
+\subsection{Lo geográfico ya se estudió, pero como predictor}
+
+Un trabajo mexicano reciente muestra que los factores de ubicación --municipio,
+unidad médica, entidad de nacimiento y de residencia-- superan incluso a la edad
+como predictores de mortalidad por COVID-19 en México~\parencite{geograficos2024}. Es
+un hallazgo relevante que debe reconocerse, pero responde a una pregunta
+distinta.
+
+La diferencia es sustantiva. Ese estudio usa la geografía como variable de
+\emph{entrada} para responder «¿dónde vives predice tu desenlace?»,
+una pregunta de epidemiología espacial. Esta tesis usa la geografía como eje de
+\emph{auditoría} para responder «¿el modelo comete más errores en unas entidades
+que en otras, y cómo se corrige?», una pregunta de equidad algorítmica. Que la
+entidad sea informativa como predictor no dice nada sobre si el modelo es
+igualmente confiable en cada entidad; son propiedades independientes.
+
+\subsection{La equidad algorítmica en salud es madura, pero fuera de México}
+
+La literatura de equidad en salud es rica y está anclada en otros contextos y
+otros atributos sensibles. \textcite{nejadshamsi2026} auditan y
+mitigan el sesgo por sexo en clasificación de severidad de COVID-19 con datos de
+Canadá. En imagen médica se ha documentado sistemáticamente cómo los sesgos de
+composición de las cohortes de entrenamiento se trasladan al desempeño por
+subgrupo~\parencite{riccilara2022}. No se identificó trabajo alguno que use datos
+mexicanos tratando la entidad federativa como atributo sensible ligado a la
+desigualdad de infraestructura de salud.
+
+\subsection{El vacío que ocupa esta tesis}
+
+\begin{table}[htbp]
+\centering
+\caption{Posición de esta tesis respecto de la literatura.}
+\label{tab:vacio}
+\small
+\begin{tabular}{p{4.6cm} p{4.6cm} p{4.6cm}}
+\toprule
+Dimensión & Estado en la literatura & Aporte de esta tesis \\
+\midrule
+Predicción de desenlace (MX) & Saturado & Línea de base, no aportación \\
+Geografía como predictor (MX) & Estudiado & Se distingue: geografía como eje de equidad \\
+Equidad en salud & Madura, fuera de México & Se traslada y adapta al contexto mexicano \\
+Auditoría de equidad por entidad (MX) & No identificado & Eje central y original \\
+Mitigación y frontera de Pareto (MX) & No identificado & Instrumento de decisión entregable \\
+Validación externa de la equidad & Rara vez realizada & Pendiente (véase sección~\ref{sec:alcance}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+En una frase: sabemos que la geografía predice la mortalidad en México y que la
+equidad algorítmica importa en otros países, pero nadie ha preguntado todavía si
+un modelo clínico entrenado con datos mexicanos es igual de preciso entre
+entidades federativas, ni cómo corregir esa inequidad.

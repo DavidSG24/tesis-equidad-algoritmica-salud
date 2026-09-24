@@ -1,0 +1,45 @@
+% =============================================================================
+%  Tesis de Maestría en Ciencia de Datos — David Segundo
+%  Compilar con:  latexmk -pdf tesis.tex   (desde este directorio)
+%
+%  Las cifras del capítulo de resultados NO se escriben a mano: provienen de
+%  macros_resultados.tex y tablas/, que genera generar_tablas.py a partir de los
+%  JSON que exportan los notebooks 03 y 04.
+% =============================================================================
+\documentclass[12pt,letterpaper,openany]{report}
+
+\input{preambulo}
+\input{macros_resultados}
+
+\begin{document}
+
+\input{caratula}
+
+\pagenumbering{roman}
+\input{capitulos/00_resumen}
+\tableofcontents
+\listoftables
+\listoffigures
+
+\cleardoublepage
+\pagenumbering{arabic}
+
+\include{capitulos/01_introduccion}
+\include{capitulos/02_marco_teorico}
+\include{capitulos/03_metodologia}
+\include{capitulos/04_resultados}
+\include{capitulos/05_discusion}
+\include{capitulos/06_conclusiones}
+
+% \raggedright dentro de un grupo: los DOI largos no se pueden dividir y
+% justificados desbordan el margen.
+\begingroup
+\raggedright
+\printbibliography[heading=bibintoc,title={Referencias}]
+\endgroup
+
+\appendix
+\include{capitulos/A_reproducibilidad}
+\include{capitulos/B_variables}
+
+\end{document}

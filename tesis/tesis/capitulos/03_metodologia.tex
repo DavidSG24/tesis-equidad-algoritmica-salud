@@ -1,0 +1,292 @@
+\chapter{Metodología}
+\label{cap:metodologia}
+
+\section{Fuente de datos y cohorte}
+
+La fuente primaria es la base abierta de COVID-19 de la Dirección General de
+Epidemiología (DGE) de la Secretaría de Salud. Se emplea el corte anual
+\texttt{\cohorteFuente}, que contiene \nBaseCompleta{} registros de notificación
+del año 2021 con variables demográficas, entidad de residencia, comorbilidades y
+desenlaces.
+
+Como fuente de contexto se emplea el índice de marginación por entidad
+federativa de CONAPO, edición 2020, construido sobre el Censo de Población y
+Vivienda 2020 del INEGI~\parencite{conapo2020}. Se usa el archivo por entidad
+(\texttt{IME\_2020.xls}), del que se toman el índice y el grado de marginación.
+
+La cohorte de análisis se restringe a \textbf{casos COVID confirmados}
+(\texttt{CLASIFICACION\_FINAL} $\in \{1,2,3\}$), lo que produce
+$n=\cohorteN$ registros con una mortalidad observada de \cohorteTasaDef\,\%. La
+restricción es deliberada: un modelo de mortalidad \emph{por COVID} debe
+estimarse sobre enfermos de COVID. Incluir casos negativos y sospechosos mezcla
+poblaciones con mecanismos de riesgo distintos y diluye la señal; la prevalencia
+del desenlace cae entonces a \tasaDefBase\,\% y el modelo pasa a describir
+mortalidad en población tamizada, que es otra pregunta.
+
+\section{Definición de desenlaces y control de fuga de información}
+\label{sec:fuga}
+
+El desenlace modelado es la \textbf{defunción}, derivada del campo
+\texttt{FECHA\_DEF}: la base codifica \texttt{9999-99-99} para paciente vivo.
+
+\nota{La cohorte tiene una propiedad estructural que condiciona la lectura de
+todo el capítulo de resultados y conviene declarar aquí. Entre los casos
+confirmados, el número de defunciones registradas como ambulatorias es
+\defAmbulatorias: fallecer implica estar registrado como hospitalizado. El
+desenlace solo es posible, por tanto, en el \fracHosp\,\% de la cohorte
+($n=\nHosp$), y el resto son casos que no pueden fallecer por construcción. Esto
+no invalida la tarea --estimar riesgo al primer contacto sobre todo caso
+confirmado es precisamente el triage que motiva la tesis-- pero significa que
+parte de la discriminación consiste en separar ambulatorios de hospitalizados. La
+sección~\ref{sec:sensibilidad} cuantifica cuánta.}
+
+El control de fuga de información es la decisión metodológica más importante del
+canal. El punto de predicción es el \emph{primer contacto}, de modo que ninguna variable
+posterior a ese momento puede ser predictor. Se excluyen explícitamente:
+
+\begin{itemize}[leftmargin=*]
+  \item \texttt{UCI} e \texttt{INTUBADO}, que describen el curso hospitalario y
+    solo se conocen después de la decisión que el modelo pretende apoyar.
+  \item \texttt{FECHA\_DEF} y todo lo derivado de ella, salvo el desenlace mismo.
+  \item \texttt{TIPO\_PACIENTE} como predictor de mortalidad, por ser posterior
+    al triage.
+\end{itemize}
+
+Los predictores admitidos son la edad, el sexo y once comorbilidades o signos
+registrados al primer contacto: diabetes, EPOC, asma, inmunosupresión,
+hipertensión, otra comorbilidad, enfermedad cardiovascular, obesidad, enfermedad
+renal crónica, tabaquismo y neumonía.
+
+\nota{La inclusión de \texttt{NEUMONIA} merece justificación. En el formato de la
+DGE se captura en el primer contacto y no durante la evolución hospitalaria, por
+lo que es admisible en ese punto. Aun así resulta el predictor más informativo del
+modelo (sección~\ref{sec:importancia}), de modo que la validez de esa captura es
+un supuesto del que dependen los resultados. La
+sección~\ref{sec:sensibilidad_res} reentrena el modelo sin ella para acotar
+cuánto del desempeño y de la inequidad descansan en esa única variable.}
+
+\section{Limpieza y recodificación}
+
+La base codifica las categóricas con enteros y usa códigos especiales para
+ausencia: \texttt{97} (no aplica), \texttt{98} (se ignora) y \texttt{99} (no
+especificado). El tratamiento aplicado es:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Edad.} Valores fuera de $[0,120]$ se marcan como faltantes.
+  \item \textbf{Sexo.} Se deriva un indicador binario \texttt{sexo\_mujer}
+    ($1=$ mujer), dejando faltante el código \texttt{99}.
+  \item \textbf{Entidad.} \texttt{ENTIDAD\_RES} se traduce a nombre mediante el
+    catálogo de 32 entidades; los códigos 97--99 quedan sin etiqueta.
+  \item \textbf{Comorbilidades.} Cada variable produce dos columnas: una binaria
+    ($1=$ sí, $0=$ no, faltante en otro caso) y un \emph{indicador de faltante}.
+    La codificación de ausencia se conserva como información en lugar de
+    imputarse a ciegas, porque su frecuencia difiere entre entidades y es en sí
+    un posible mecanismo de inequidad.
+  \item \textbf{Grupo etario.} Cortes en 0--17, 18--39, 40--59 y 60 o más años,
+    definidos una única vez para todo el canal.
+\end{itemize}
+
+\section{Partición de datos}
+\label{sec:particion}
+
+Se emplea una partición en tres bloques, estratificada por el desenlace con
+semilla fija:
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Prueba} (25\,\%, $n=\testN$). Se separa primero y no interviene en
+    ninguna decisión de ajuste.
+  \item \textbf{Calibración} (20\,\% del resto, $n=\nCalib$). Se usa exclusivamente para
+    ajustar la transformación de calibración y los umbrales por grupo de la
+    mitigación post-procesamiento.
+  \item \textbf{Entrenamiento} (el remanente, $n=\nTrain$). Ajuste de los modelos.
+\end{enumerate}
+
+El tercer bloque es necesario, y no un refinamiento cosmético. Tanto la
+calibración como los umbrales por entidad son parámetros ajustados a datos; si se
+estiman sobre el conjunto de prueba, las métricas resultantes están sesgadas
+optimistamente. La sección~\ref{sec:mitigacion_res} cuantifica esa diferencia.
+
+\section{Modelo de referencia}
+
+Se entrenan dos modelos sobre los mismos predictores:
+
+\begin{description}[leftmargin=*,style=nextline]
+  \item[Regresión logística] Con imputación por mediana, estandarización y
+    \texttt{class\_weight="balanced"}. Sirve como referencia interpretable.
+  \item[Impulso del gradiente por histogramas] \texttt{HistGradientBoosting\-Classifier}
+    con 300 iteraciones, tasa de aprendizaje 0.05, profundidad máxima 6 y
+    \texttt{class\_weight="balanced"}. Es el modelo principal y el sujeto de la
+    auditoría.
+\end{description}
+
+Ninguno de los dos incorpora la entidad federativa como predictor: la entidad se
+reserva como atributo sensible para auditar, no como variable de entrada.
+
+\subsection{Calibración}
+
+El desbalance de clases del desenlace es de \desbalance{} a 1, y el parámetro
+\texttt{class\_weight} en modo \texttt{balanced} lo compensa reponderando la
+pérdida en proporción inversa a la frecuencia de cada clase. Como
+consecuencia, el modelo sobreestima el riesgo absoluto por un factor cercano a
+cuatro (sección~\ref{cap:resultados}). Se aplica por tanto una \textbf{regresión isotónica} ajustada sobre el
+bloque de calibración. Al ser una transformación monótona, preserva el
+ordenamiento --y por tanto el AUROC-- y corrige el nivel de la probabilidad.
+
+Esta corrección es un requisito previo a la auditoría, no un adorno: sin ella, el
+error de calibración medido por grupo queda dominado por el sesgo global de
+entrenamiento y no por la inequidad entre grupos, que es el objeto de estudio.
+
+\subsection{Punto de operación}
+
+Todas las métricas dependientes de umbral se reportan en un punto de operación
+único: el umbral $\tau$ que alcanza una \textbf{sensibilidad global de
+\sensObjetivo\,\%}, propia de una herramienta de triage cuyo costo de omitir una
+defunción excede con holgura el de una alarma innecesaria. Para el modelo
+calibrado resulta $\tau=\umbralOperacion$. Fijar el mismo punto de operación en
+todas las etapas es lo que hace comparables las tablas de desempeño, auditoría y
+mitigación entre sí.
+
+\section{Métricas}
+
+\begin{table}[htbp]
+\centering
+\caption{Métricas empleadas por dimensión de evaluación.}
+\label{tab:metricas}
+\small
+\begin{tabular}{p{3.4cm} p{10.4cm}}
+\toprule
+Dimensión & Métricas \\
+\midrule
+Discriminación & AUROC; AUPRC; sensibilidad y tasa de falsos positivos en el punto de operación \\
+Calibración & Puntaje de Brier; curva de calibración por deciles; riesgo medio predicho frente a observado, global y por grupo \\
+Equidad & Brecha máxima de TPR (\emph{equalized odds}); brecha de FPR; brecha de AUROC; brecha de tasa de selección (paridad demográfica); error máximo de calibración por grupo \\
+Interpretabilidad & Importancia por permutación sobre el AUROC \\
+Utilidad agregada & Exactitud balanceada en el punto de operación \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Las métricas de equidad se implementan explícitamente en lugar de delegarse a una
+biblioteca, para que el cálculo sea auditable línea por línea; son equivalentes a
+las definiciones de Fairlearn~\parencite{fairlearn2020}.
+
+\subsection{Criterio de soporte por grupo}
+
+Un grupo se considera evaluable si tiene al menos 500 observaciones y 20 casos
+positivos en el bloque correspondiente. Por debajo de ese soporte, la estimación
+de sensibilidad tiene una varianza que domina cualquier señal de inequidad. Los
+grupos descartados se reportan explícitamente en lugar de omitirse en silencio;
+con la cohorte empleada, las \nEntidades{} entidades superan el criterio.
+
+En el análisis interseccional el mínimo se relaja a \interMinN{} observaciones.
+Exigir \numprint{500} dentro de un subgrupo etario dejaría fuera precisamente a
+las entidades pequeñas, que son las que interesa examinar. La
+sección~\ref{sec:interseccional} reporta el resultado bajo ambos criterios para
+que la conclusión no dependa de esa elección.
+
+\section{Estrategias de mitigación}
+
+Se evalúan las tres familias bajo el mismo punto de operación:
+
+\begin{description}[leftmargin=*,style=nextline]
+  \item[Pre-procesamiento] Reponderación de muestras inversamente proporcional al
+    número de registros de cada entidad, de modo que los estados con menos datos
+    pesen más durante el entrenamiento. Se reentrena el modelo con los
+    hiperparámetros idénticos a los de la línea de base, para que la única
+    diferencia sean los pesos.
+  \item[In-procesamiento] Reducción por gradiente exponenciado con restricción de
+    \emph{equalized odds}~\parencite{fairlearn2020}, sobre una submuestra de
+    \numprint{120000} registros del bloque de entrenamiento y con un clasificador
+    lineal como aprendiz base, dado que el método reentrena el modelo en cada
+    iteración. Esta limitación la hace no comparable uno a uno con las demás
+    intervenciones, y así se reporta.
+  \item[Post-procesamiento] Un umbral por entidad, elegido para alcanzar la
+    sensibilidad objetivo \emph{dentro} de cada estado. Los umbrales se estiman en
+    el bloque de calibración y se evalúan en el de prueba.
+\end{description}
+
+\subsection{Frontera de Pareto}
+
+La frontera se traza interpolando linealmente entre el umbral global y el umbral
+por entidad,
+\begin{equation}
+  \tau_g(\alpha) = (1-\alpha)\,\tau + \alpha\,\tau_g,
+  \qquad \alpha \in [0,1],
+\end{equation}
+donde $\tau_g$ es el umbral estimado para la entidad $g$. Cada valor de $\alpha$
+define una política de despliegue: $\alpha=0$ es el modelo sin mitigar y
+$\alpha=1$ la corrección completa por entidad. El conjunto de pares
+(brecha de sensibilidad, desempeño global) constituye el instrumento de decisión
+entregable, porque traslada al responsable de la política una elección que es
+normativa y no técnica.
+
+\section{Análisis de sensibilidad: subconjunto hospitalizado}
+\label{sec:sensibilidad}
+
+Se reentrena el modelo, con los mismos hiperparámetros y el mismo esquema de
+partición, restringido a los pacientes hospitalizados. Es la población en la que
+el desenlace es posible, la que corresponde a los modelos clínicos de mortalidad
+hospitalaria con los que suele compararse un trabajo de este tipo, y la que
+tendría una eventual validación externa sobre bases de egresos.
+
+Se reentrena en lugar de restringir a posteriori el conjunto de prueba del modelo
+global, porque ese modelo habría aprendido de ambulatorios y la comparación
+mediría otra cosa. El AUPRC se reporta junto con su razón respecto de la
+prevalencia, que es su línea base: sin normalizar, dos AUPRC de cohortes con
+prevalencias de 5.6\,\% y 47.5\,\% no son comparables.
+
+\section{Cuantificación de la incertidumbre}
+\label{sec:incertidumbre}
+
+Las brechas se calculan como diferencia entre el máximo y el mínimo de 32 grupos
+de tamaños muy desiguales. Ese estadístico está sesgado al alza: aun sin ningún
+efecto de entidad, el máximo y el mínimo de 32 estimaciones ruidosas se separan
+por azar. Reportarlo como estimación puntual, sin referencia, invita a
+sobreinterpretarlo. Se emplean por ello dos procedimientos complementarios.
+
+El primero es un \textbf{remuestreo estratificado por entidad}: \boB{} réplicas
+en las que cada entidad se remuestrea con reemplazo conservando su tamaño, de las
+que se obtienen intervalos de confianza al 95\,\% por percentiles para el AUROC y
+la sensibilidad de cada estado. Se estratifica dentro de la entidad, y no sobre
+todo el conjunto, para que el intervalo refleje la precisión con que se estima
+\emph{ese} estado; las entidades pequeñas deben salir con intervalos anchos.
+
+El segundo es una \textbf{prueba de permutación}: \boP{} reasignaciones al azar
+de la etiqueta de entidad, conservando los tamaños de grupo, que construyen la
+distribución de la brecha bajo la hipótesis nula de que la entidad no influye en
+el desempeño. El valor $p$ se calcula con la corrección de continuidad habitual,
+$(\#\{\text{nula} \ge \text{observada}\}+1)/(P+1)$, de modo que nunca resulta
+exactamente cero. Es este contraste, y no el intervalo de confianza, el que
+permite afirmar si las disparidades son \emph{estadísticamente significativas},
+que es la formulación de la hipótesis~\ref{h1}.
+
+\section{Transportabilidad geográfica interna}
+\label{sec:loeo}
+
+La partición aleatoria reparte cada entidad entre entrenamiento y prueba, de modo
+que el modelo siempre ha visto casos del estado en el que se le evalúa. Eso mide
+interpolación dentro de una población conocida, no generalización a un contexto
+nuevo, que es lo que importa para desplegar en una entidad cuyo perfil no estaba
+en los datos de ajuste.
+
+Se entrenan por ello \loeoNent{} modelos: cada uno excluye por completo una
+entidad y se evalúa sobre la totalidad de sus registros. La calibración se ajusta
+sobre un bloque tallado de las entidades restantes, y el umbral se fija para
+alcanzar la sensibilidad objetivo \emph{en esas entidades} --nunca en la
+excluida--, porque en despliegue no se conoce el desenlace del estado nuevo. La
+pérdida por transportabilidad es la diferencia entre el AUROC de una entidad
+cuando participó en el entrenamiento y cuando no.
+
+\nota{Este diseño \emph{no} pone a prueba la hipótesis~\ref{h4}, que habla de una
+fuente independiente: aquí la fuente, el año y el proceso de captura son los
+mismos. Lo que somete a prueba es la generalización geográfica, que es el eje del
+trabajo. \ref{h4} sigue pendiente (sección~\ref{sec:trabajo_futuro}).}
+
+\section{Reproducibilidad}
+
+El canal se implementa en cuatro cuadernos ejecutados en orden, con semillas
+fijas y un contrato de datos explícito entre etapas que verifica procedencia,
+esquema y cohorte antes de consumir cualquier artefacto. Las cifras del
+capítulo~\ref{cap:resultados} no se transcriben a mano: se generan a partir de los
+archivos de resultados que exportan los cuadernos. El apéndice~\ref{ap:reproducibilidad}
+documenta el mecanismo.

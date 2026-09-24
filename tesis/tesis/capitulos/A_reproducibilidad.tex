@@ -1,0 +1,138 @@
+\chapter{Reproducibilidad del canal analítico}
+\label{ap:reproducibilidad}
+
+\section{Estructura y orden de ejecución}
+
+El análisis se implementa en seis cuadernos de Jupyter que deben ejecutarse en
+orden, más un módulo compartido que fija el contrato entre ellos:
+
+\begin{table}[htbp]
+\centering
+\caption{Artefactos del canal analítico.}
+\label{tab:artefactos}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{3.9cm} p{5.4cm} p{4.4cm}}
+\toprule
+Componente & Función & Salidas \\
+\midrule
+\texttt{tesis\_common.py} &
+Contrato compartido: rutas, cohorte, hiperparámetros, partición, punto de
+operación y métricas de equidad & --- \\
+\texttt{01\_exploracion\allowbreak\_datos\_dge} &
+Ingesta, recodificación, control de fuga, análisis exploratorio &
+\texttt{*.parquet}, \texttt{*.manifest.json}, \texttt{calidad\allowbreak\_datos.json},
+figura del EDA \\
+\texttt{02\_modelo\_referencia} &
+Entrenamiento, calibración isotónica, punto de operación, importancia y
+sensibilidad al subconjunto hospitalizado y a la exclusión de
+\texttt{NEUMONIA} &
+\texttt{modelo\_hgb\allowbreak\_mortalidad\allowbreak.joblib},
+\texttt{modelo\allowbreak\_referencia.json},
+\texttt{sensibilidad\allowbreak\_hospitalizados.json} \\
+\texttt{03\_auditoria\_equidad} &
+Auditoría por entidad, sexo, edad e interseccional &
+\texttt{auditoria\allowbreak\_equidad.json}, figura de equidad \\
+\texttt{04\_mitigacion\_pareto} &
+Correlatos, tres familias de mitigación, frontera de Pareto &
+\texttt{resultados\allowbreak\_tesis.json}, figura de Pareto \\
+\texttt{05\_transportabilidad\allowbreak\_loeo} &
+Dejar-una-entidad-fuera: \loeoNent{} modelos, cada uno excluyendo una entidad &
+\texttt{transportabilidad\allowbreak\_loeo.json}, figura de transportabilidad \\
+\texttt{06\_incertidumbre} &
+Remuestreo (\boB{} réplicas) y prueba de permutación (\boP) sobre las brechas &
+\texttt{incertidumbre\allowbreak\_brechas.json}, figura de incertidumbre \\
+\texttt{generar\_tablas.py} &
+Traduce los JSON a tablas y macros de \LaTeX{} &
+\texttt{tesis/tablas/}, \texttt{macros\allowbreak\_resultados.tex} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Contrato de datos entre etapas}
+
+El riesgo característico de un canal por cuadernos es que una etapa consuma un
+artefacto producido por una versión anterior de la etapa previa, sin que nada lo
+señale. Para evitarlo, cada etapa verifica la procedencia de lo que consume antes
+de usarlo:
+
+\begin{enumerate}[leftmargin=*]
+  \item El cuaderno 01 escribe, junto al conjunto de datos limpio, un
+    \textbf{manifiesto} en JSON con la cohorte empleada, el número de filas, la
+    lista de columnas, las tasas de desenlace y las versiones de biblioteca.
+  \item Los cuadernos 02 a 04 llaman a \texttt{cargar\_cohorte()}, que exige la
+    presencia del manifiesto y verifica columnas requeridas, número de filas y
+    bandera de cohorte. Cualquier discrepancia detiene la ejecución con un mensaje
+    accionable en lugar de continuar.
+  \item El modelo se persiste como \textbf{paquete} --estimador, calibrador,
+    lista de predictores, hiperparámetros y huella de la cohorte-- y no como
+    estimador desnudo. \texttt{cargar\_modelo()} rechaza un modelo entrenado sobre
+    otra cohorte o con otros predictores.
+  \item La escritura del conjunto limpio \textbf{falla de inmediato} si no puede
+    completarse, en lugar de degradar a otro formato: una degradación silenciosa
+    dejaría en disco el artefacto de la corrida anterior.
+\end{enumerate}
+
+El cuaderno 05 es la única excepción deliberada a la regla de que solo el 02
+entrena: su objeto de estudio \emph{es} un conjunto de modelos que nunca vieron la
+entidad evaluada. El 06 no entrena: reconstruye el escenario auditado y solo
+remuestrea sobre él. Usa los hiperparámetros canónicos, de modo que la única
+diferencia con la línea de base es qué entidades entraron al ajuste.
+
+Los hiperparámetros del modelo, la partición, el punto de operación, los cortes de
+edad y las métricas de equidad tienen una única definición, en
+\texttt{tesis\_common.py}. Ninguna etapa los redefine, de modo que la alineación
+entre cuadernos es estructural y no depende de que coincidan por convención.
+
+\section{Determinismo}
+
+Todas las operaciones estocásticas usan semilla fija (42, salvo la submuestra del
+método de in-procesamiento, que usa 3). La partición se deriva de índices
+posicionales estratificados por el desenlace, de modo que los bloques de
+entrenamiento, calibración y prueba son idénticos en los cuadernos 02, 03 y 04.
+
+Un caso merece mención aparte porque no se resuelve fijando la semilla del ajuste.
+La reducción por gradiente exponenciado de Fairlearn devuelve una distribución
+sobre clasificadores, y su método de predicción \emph{muestrea} de ella: sin una
+semilla en la llamada a predecir, la misma ejecución sobre el mismo modelo ya
+ajustado produce brechas distintas. Al detectarlo se midió el efecto --brechas
+entre \inMin{} y \inMax{} sobre \inRealizaciones{} realizaciones-- y se fijó la
+semilla también en la predicción. Sin esa corrección, el resultado del método de
+in-procesamiento no era reproducible entre ejecuciones.
+
+\section{Entorno de ejecución}
+
+\begin{table}[htbp]
+\centering
+\caption{Versiones utilizadas para producir los resultados de este documento.}
+\label{tab:entorno}
+\small
+\begin{tabular}{l l l l}
+\toprule
+Componente & Versión & Componente & Versión \\
+\midrule
+Python        & 3.14.5  & \texttt{scipy}       & 1.18.0 \\
+\texttt{numpy}        & 2.5.1   & \texttt{fairlearn}   & 0.14.0 \\
+\texttt{pandas}       & 3.0.5   & \texttt{matplotlib}  & 3.11.1 \\
+\texttt{scikit-learn} & 1.9.0   & \texttt{joblib}      & 1.5.3 \\
+\texttt{pyarrow}      & 25.0.0  & \TeX{} Live          & 2026 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Reproducción del documento}
+
+\begin{enumerate}[leftmargin=*]
+  \item Colocar el corte anual \texttt{\cohorteFuente} en el directorio raíz, o
+    apuntar a él con la variable de entorno \texttt{DGE\_DATA\_PATH}.
+  \item Ejecutar los seis cuadernos en orden.
+  \item Ejecutar \texttt{python3 generar\_tablas.py} para regenerar tablas y
+    macros.
+  \item Compilar con \texttt{latexmk -pdf tesis.tex} desde el directorio
+    \texttt{tesis/}.
+\end{enumerate}
+
+Las cifras del capítulo~\ref{cap:resultados} no se editan a mano en ningún punto:
+provienen de macros generadas desde los archivos de resultados. Si una cifra del
+texto no coincide con los cuadernos, es porque el paso 3 no se ejecutó, no porque
+el texto y el análisis discrepen.

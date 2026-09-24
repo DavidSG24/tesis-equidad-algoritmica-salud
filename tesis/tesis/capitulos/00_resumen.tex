@@ -1,0 +1,58 @@
+\chapter*{Resumen}
+\addcontentsline{toc}{chapter}{Resumen}
+
+Existe una literatura amplia que predice hospitalización y mortalidad por
+COVID-19 con datos mexicanos, y su desempeño puede considerarse un problema
+resuelto. Esta tesis desplaza el objeto de estudio: no pregunta si un modelo
+acierta, sino \emph{si acierta por igual}, con énfasis en el sesgo geográfico
+entre entidades federativas, una dimensión asociada a la desigualdad estructural
+del sistema de salud en México y prácticamente inexplorada.
+
+Sobre la base abierta de COVID-19 de la Dirección General de Epidemiología
+(DGE), restringida a casos confirmados del año 2021
+($n=\cohorteN$; mortalidad observada \cohorteTasaDef\,\%), se entrena un modelo
+de referencia de mortalidad al primer contacto, con control estricto de fuga de
+información, y se calibra mediante regresión isotónica sobre un bloque de
+calibración independiente. El modelo alcanza un AUROC de \aurocGlobal{} y un
+puntaje de Brier de \brierCalibrado{} tras calibrar (frente a \brierCrudo{} sin
+calibrar). Ese modelo se somete después a una auditoría de equidad por entidad,
+sexo y grupo etario, y a las tres familias de mitigación de sesgo
+--pre, in y post-procesamiento-- sobre un punto de operación clínico común de
+\sensObjetivo\,\% de sensibilidad.
+
+Los resultados confirman inequidad geográfica sustantiva: la sensibilidad varía
+\gapTPRentidad{} entre entidades y el AUROC \gapAUROCentidad{}, con el peor
+desempeño en \entPeor{} (AUROC \entPeorAUROC) y el mejor en \entMejor{}
+(\entMejorAUROC). La brecha persiste al restringir el análisis a adultos de 60
+años o más, lo que descarta que se explique solo por composición etaria. En
+cambio, \emph{no} se explica por la marginación de la entidad: el índice de
+CONAPO 2020 no muestra asociación con el desempeño ($r=\corrMargAurocr$,
+$p=\corrMargAurocp$) ni aparece gradiente al agregar por grado de marginación.
+Entre
+las intervenciones evaluadas, únicamente el post-procesamiento por umbrales
+específicos de entidad reduce la disparidad de forma apreciable --de \gapBase{}
+a \gapPost{}, una reducción de \reduccionPost\,\%-- y lo hace sin costo de
+desempeño global. La reponderación previa al entrenamiento y la restricción de
+\emph{equalized odds} durante el entrenamiento resultan insuficientes o
+inestables con 32 grupos de tamaño muy desigual. Documentar esa asimetría entre
+familias de mitigación es, en sí, un resultado.
+
+Dos análisis de robustez acotan la lectura. Al excluir por completo una entidad
+del entrenamiento y evaluarla, el desempeño apenas cambia (pérdida mediana de
+AUROC \loeoMediana) y las brechas no se acentúan: la inequidad no proviene de la
+cobertura de datos. Y al restringir la cohorte a los pacientes hospitalizados
+--la población en la que el desenlace es posible, pues fallecer implica estar
+registrado como hospitalizado-- el AUROC cae a \hospAUROC{} y la disparidad se
+desplaza del umbral hacia el ordenamiento, lo que sugiere que la mitigación por
+umbrales sería insuficiente en la población clínicamente crítica.
+
+La contribución es la primera auditoría de equidad geográfica de un modelo
+clínico sobre datos abiertos mexicanos, acompañada de una frontera de Pareto
+equidad--desempeño utilizable como instrumento de decisión antes del despliegue.
+
+\vspace{1em}
+\noindent\textbf{Palabras clave:} equidad algorítmica, sesgo geográfico,
+estratificación de riesgo, COVID-19, datos abiertos de salud, calibración,
+\emph{equalized odds}, frontera de Pareto.
+
+\cleardoublepage

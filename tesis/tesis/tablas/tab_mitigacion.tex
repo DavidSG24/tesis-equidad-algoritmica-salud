@@ -1,0 +1,35 @@
+% Generado por generar_tablas.py -- NO editar a mano.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparación de las tres familias de mitigación sobre el conjunto de
+prueba. Menor $\Delta$TPR indica mayor equidad entre entidades.}
+\label{tab:mitigacion}
+\small\setlength{\tabcolsep}{5pt}
+\begin{tabular}{l r r r r}
+\toprule
+Intervención & $\Delta$TPR & $\Delta$FPR & Selec. & Exact.\ bal. \\
+\midrule
+Línea de base (umbral global) & 0.294 & 0.087 & 0.100 & 0.868 \\
+Pre: reponderación por entidad & 0.290 & 0.082 & 0.099 & 0.865 \\
+In: \emph{equalized odds} (Fairlearn)\textsuperscript{a} & 0.445 & -- & -- & -- \\
+Post: umbral por entidad\textsuperscript{b} & 0.140 & 0.101 & 0.102 & 0.871 \\
+Post: umbral por entidad (en muestra)\textsuperscript{c} & 0.022 & 0.107 & 0.101 & 0.869 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.4em}
+\begin{minipage}{0.95\linewidth}\footnotesize
+\textsuperscript{a} Evaluado en una submuestra del bloque de entrenamiento
+($n=\numprint{120000}$) y con un clasificador lineal; no es comparable uno a uno
+con las demás filas. La reducción devuelve una distribución sobre clasificadores:
+sobre 20 realizaciones del mismo modelo
+ajustado, la brecha tiene mediana 0.397 y rango
+[0.245, 0.628], intervalo
+que contiene a la línea de base.\\
+\textsuperscript{b} Umbrales estimados en el bloque de calibración y evaluados
+en el de prueba: es la cifra desplegable.\\
+\textsuperscript{c} Umbrales estimados sobre el propio conjunto de prueba:
+cota optimista, reportada solo para dimensionar el sesgo de ajuste en muestra.
+\end{minipage}
+\end{table}

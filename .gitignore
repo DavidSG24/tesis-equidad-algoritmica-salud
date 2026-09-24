@@ -1,0 +1,58 @@
+# ---------------------------------------------------------------------------
+#  Datos
+#  Los microdatos no se versionan: son públicos y se descargan de la fuente.
+#  Ver tesis/README.md para las rutas esperadas.
+#    COVID19MEXICO2021.csv      1.3 GB  DGE / Secretaría de Salud
+#    dge_covid2021_limpio.csv   895 MB  derivado del cuaderno 01
+#    dge_covid2021_limpio.parquet 28 MB derivado del cuaderno 01
+# ---------------------------------------------------------------------------
+*.csv
+*.parquet
+
+# Artefactos de modelo (regenerables con el cuaderno 02)
+*.joblib
+
+# ---------------------------------------------------------------------------
+#  Compilación de LaTeX
+# ---------------------------------------------------------------------------
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+*.vrb
+
+# ---------------------------------------------------------------------------
+#  Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# ---------------------------------------------------------------------------
+#  Material institucional de INFOTEC
+#  La plantilla de tesis y el logotipo no son material propio; no se
+#  redistribuyen en un repositorio público. armar_entrega.py los necesita en
+#  local (ver README.md).
+# ---------------------------------------------------------------------------
+plantilla infotec/
+
+# ---------------------------------------------------------------------------
+#  Sistema y herramientas locales
+# ---------------------------------------------------------------------------
+.DS_Store
+.claude/
+~$*.docx
+~$*.xlsx

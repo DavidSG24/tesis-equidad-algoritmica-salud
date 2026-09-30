@@ -12,6 +12,44 @@ y el proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 - Control de versiones del proyecto: `.gitignore`, `README.md` raíz y este
   `CHANGELOG.md`.
 
+## [2.1.0] - 2026-09-28
+
+Entrega 2B: presentación en video del avance del proyecto.
+
+### Añadido
+
+- Presentación en Beamer de 13 diapositivas (`entregas/presentacion_2b/`), con
+  identidad visual propia y las figuras del análisis.
+- Guión de locución en registro hablado, con marca de tiempo por diapositiva y
+  punto de control de ritmo. Duración medida: 6:41 a ritmo normal, sobre un tope
+  de 7 minutos.
+- Versión alterna de 19 diapositivas, conservada por si cambia el límite de
+  duración.
+
+## [2.0.0] - 2026-09-25
+
+Segunda entrega: marco metodológico y atención a las observaciones de la 1B.
+
+### Añadido
+
+- Capítulo 3 reescrito como marco metodológico completo sobre las seis fases de
+  CRISP-DM, con una adaptación propia: la evaluación se desdobla en desempeño
+  global y auditoría de equidad.
+- Apartados nuevos de entendimiento del negocio (con criterios de éxito
+  medibles), modelado, evaluación e implementación.
+- Lista de cotejo que relaciona cada una de las 58 observaciones del asesor con
+  la modificación realizada y su ubicación.
+- Resaltado automático en amarillo de todo lo que cambió respecto de la versión
+  revisada, por comparación contra el documento original.
+- Ocho referencias nuevas del marco metodológico (CRISP-DM, KDD, remuestreo,
+  curvas de precisión–exhaustividad y deuda técnica en aprendizaje automático).
+- Generadores `contenido_2a.py`, `armar_entrega_2a.py` y `lista_cotejo_2a.py`.
+
+### Modificado
+
+- Terminología unificada en todo el documento: «cohorte» pasa a «conjunto de
+  datos» y «canal» a «flujo de trabajo».
+
 ## [1.1.0] - 2026-09-23
 
 Primera entrega (capítulos 1 a 3) corregida a partir de la revisión del asesor
